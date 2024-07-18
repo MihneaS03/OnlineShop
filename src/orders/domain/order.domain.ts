@@ -35,4 +35,20 @@ export class Order {
 
   @OneToMany(() => OrderDetail, (orderDetail) => orderDetail.order)
   orderDetails: OrderDetail[];
+
+  constructor(
+    customer: Customer,
+    addressCountry: string,
+    addressCity: string,
+    addressCounty: string,
+    addressStreet: string,
+    createdAt?: Date,
+  ) {
+    this.customer = customer;
+    this.createdAt = createdAt;
+    this.addressCountry = addressCountry;
+    this.addressCity = addressCity;
+    this.addressCounty = addressCounty;
+    this.addressStreet = addressStreet;
+  }
 }

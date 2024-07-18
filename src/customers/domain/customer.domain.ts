@@ -23,4 +23,18 @@ export class Customer {
 
   @OneToMany(() => Order, (order) => order.customer)
   orders: Order[];
+
+  constructor(
+    firstName: string,
+    lastName: string,
+    username: string,
+    password: string,
+    emailAddress: string,
+  ) {
+    this.firstName = firstName;
+    this.lastName = lastName;
+    this.username = username;
+    this.password = password;
+    this.emailAddress = emailAddress;
+  }
 }
