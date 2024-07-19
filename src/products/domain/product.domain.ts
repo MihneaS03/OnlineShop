@@ -24,7 +24,7 @@ export class Product {
   @Column({ name: 'Price' })
   price: number;
 
-  @Column({ name: 'Weight' })
+  @Column({ name: 'Weight', type: 'decimal' })
   weight: number;
 
   @Column({ name: 'Supplier' })
@@ -36,6 +36,9 @@ export class Product {
   @ManyToOne(
     () => ProductCategory,
     (productCategory) => productCategory.products,
+    {
+      eager: true,
+    },
   )
   @JoinColumn({ name: 'Category' })
   category: ProductCategory;
@@ -45,4 +48,22 @@ export class Product {
 
   @OneToMany(() => Stock, (stock) => stock.product)
   stocks: Stock[];
+
+  constructor(
+    name: string,
+    description: string,
+    price: number,
+    weight: number,
+    supplier: string,
+    imageUrl: string,
+    category: ProductCategory,
+  ) {
+    this.name = name;
+    this.description = description;
+    this.price = price;
+    this.weight = weight;
+    this.supplier = supplier;
+    this.imageUrl = imageUrl;
+    this.category = category;
+  }
 }

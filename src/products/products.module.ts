@@ -8,16 +8,23 @@ import { ProductCategoryRepository } from './repository/productCategory.reposito
 import { ProductCategoryService } from './service/productCategory.service';
 import { ProductCategoryMapper } from './mapper/productCategory.mapper';
 import { ProductCategoryController } from './controller/productCategory.controller';
+import { ProductRepository } from './repository/product.repository';
+import { ProductService } from './service/product.service';
+import { ProductController } from './controller/product.controller';
+import { ProductMapper } from './mapper/product.mapper';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([Product, ProductCategory, Stock, Location]),
   ],
   providers: [
+    ProductRepository,
+    ProductService,
+    ProductMapper,
     ProductCategoryRepository,
     ProductCategoryService,
     ProductCategoryMapper,
   ],
-  controllers: [ProductCategoryController],
+  controllers: [ProductController, ProductCategoryController],
 })
 export class ProductsModule {}

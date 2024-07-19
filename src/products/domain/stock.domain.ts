@@ -11,11 +11,11 @@ export class Stock {
   @PrimaryColumn('uuid', { name: 'Location' })
   locationId: string;
 
-  @ManyToOne(() => Product, (product) => product.stocks)
+  @ManyToOne(() => Product, (product) => product.stocks, { eager: true })
   @JoinColumn({ name: 'Product' })
   product: Product;
 
-  @ManyToOne(() => Location, (location) => location.stocks)
+  @ManyToOne(() => Location, (location) => location.stocks, { eager: true })
   @JoinColumn({ name: 'Location' })
   location: Location;
 

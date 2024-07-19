@@ -11,14 +11,11 @@ export class OrderRepository {
   ) {}
 
   getAllOrders(): Promise<Order[]> {
-    return this.orderRepository.find({ relations: ['customer'] });
+    return this.orderRepository.find();
   }
 
   getOrderById(id: string): Promise<Order | null> {
-    return this.orderRepository.findOne({
-      where: { id },
-      relations: ['customer'],
-    });
+    return this.orderRepository.findOneBy({ id });
   }
 
   async createOrder(order: Order): Promise<Order> {

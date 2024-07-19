@@ -11,15 +11,17 @@ export class OrderDetail {
   @PrimaryColumn('uuid', { name: 'Product' })
   productId: string;
 
-  @ManyToOne(() => Order, (order) => order.orderDetails)
+  @ManyToOne(() => Order, (order) => order.orderDetails, { eager: true })
   @JoinColumn({ name: 'Order' })
   order: Order;
 
-  @ManyToOne(() => Product, (product) => product.orderDetails)
+  @ManyToOne(() => Product, (product) => product.orderDetails, { eager: true })
   @JoinColumn({ name: 'Product' })
   product: Product;
 
-  @ManyToOne(() => Location, (location) => location.orderDetails)
+  @ManyToOne(() => Location, (location) => location.orderDetails, {
+    eager: true,
+  })
   @JoinColumn({ name: 'ShippedFrom' })
   location: Location;
 

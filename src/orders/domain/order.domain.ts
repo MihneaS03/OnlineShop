@@ -29,7 +29,7 @@ export class Order {
   @Column({ name: 'Address.StreetAddress' })
   addressStreet: string;
 
-  @ManyToOne(() => Customer, (customer) => customer.orders)
+  @ManyToOne(() => Customer, (customer) => customer.orders, { eager: true })
   @JoinColumn({ name: 'Customer' })
   customer: Customer;
 
