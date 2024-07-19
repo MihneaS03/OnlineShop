@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { ProductCategoryRepository } from '../repository/product-category.repository';
 import { ProductCategory } from '../domain/product-category.domain';
 
@@ -12,8 +12,13 @@ export class ProductCategoryService {
     return this.productCategoryRepository.getAllProductCategories();
   }
 
-  getProductCategoryById(id: string): Promise<ProductCategory | null> {
-    return this.productCategoryRepository.getProductCategoryById(id);
+  async getProductCategoryById(id: string): Promise<ProductCategory | null> {
+    const productCategory: ProductCategory =
+      await this.productCategoryRepository.getProductCategoryById(id);
+    if (!productCategory) {
+      throw new NotFoundException('The product category was not found');
+    }
+    return productCategory;
   }
 
   async createProductCategory(

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { Location } from '../domain/location.domain';
 import { LocationRepository } from '../repository/location.repository';
 
@@ -10,8 +10,13 @@ export class LocationService {
     return this.locationRepository.getAllLocations();
   }
 
-  getLocationById(id: string): Promise<Location | null> {
-    return this.locationRepository.getLocationById(id);
+  async getLocationById(id: string): Promise<Location | null> {
+    const location: Location =
+      await this.locationRepository.getLocationById(id);
+    if (!location) {
+      throw new NotFoundException('The location was not found');
+    }
+    return location;
   }
 
   async createLocation(location: Location): Promise<Location> {

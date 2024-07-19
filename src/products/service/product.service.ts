@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { ProductRepository } from '../repository/product.repository';
 import { Product } from '../domain/product.domain';
 
@@ -10,8 +10,12 @@ export class ProductService {
     return this.productRepository.getAllProducts();
   }
 
-  getProductById(id: string): Promise<Product> {
-    return this.productRepository.getProductById(id);
+  async getProductById(id: string): Promise<Product | null> {
+    const product: Product = await this.productRepository.getProductById(id);
+    if (!product) {
+      throw new NotFoundException('The product was not found');
+    }
+    return product;
   }
 
   async createProduct(product: Product): Promise<Product> {

@@ -13,6 +13,7 @@ import { ProductCategoryMapper } from '../mapper/product-category.mapper';
 import { ProductCategory } from '../domain/product-category.domain';
 import { CreateProductCategoryDTO } from '../dto/create-product-category.dto';
 import { UpdateProductCategoryDTO } from '../dto/update-product-category.dto';
+import { ApiResponse } from '@nestjs/swagger';
 
 @Controller('product-categories')
 export class ProductCategoryController {
@@ -22,6 +23,10 @@ export class ProductCategoryController {
   ) {}
 
   @Get()
+  @ApiResponse({
+    status: 200,
+    description: 'The categories were succesfully retrieved',
+  })
   async getAllProductCategories(): Promise<ProductCategoryDTO[]> {
     const allProductCategories: ProductCategory[] =
       await this.productCategoryService.getAllProductCategories();
@@ -33,6 +38,14 @@ export class ProductCategoryController {
   }
 
   @Get(':id')
+  @ApiResponse({
+    status: 200,
+    description: 'The category was succesfully retrieved',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'The category was not found',
+  })
   async getProductCategoryById(
     @Param('id') id: string,
   ): Promise<ProductCategoryDTO> {
@@ -44,6 +57,10 @@ export class ProductCategoryController {
   }
 
   @Post()
+  @ApiResponse({
+    status: 201,
+    description: 'The category was succesfully created',
+  })
   async createProductCategory(
     @Body() createProductCategoryDTO: CreateProductCategoryDTO,
   ): Promise<ProductCategory> {
@@ -55,6 +72,14 @@ export class ProductCategoryController {
   }
 
   @Put(':id')
+  @ApiResponse({
+    status: 200,
+    description: 'The category was succesfully updated',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'The category was not found',
+  })
   async updateProductCategory(
     @Param('id') id: string,
     @Body() updateProductCategoryDTO: UpdateProductCategoryDTO,
@@ -68,6 +93,14 @@ export class ProductCategoryController {
   }
 
   @Delete(':id')
+  @ApiResponse({
+    status: 200,
+    description: 'The category was succesfully deleted',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'The category was not found',
+  })
   async removeProductCategory(@Param('id') id: string): Promise<void> {
     await this.productCategoryService.removeProductCategory(id);
   }

@@ -1,7 +1,22 @@
+import { ApiProperty } from '@nestjs/swagger';
+
 export class UpdateOrderDetailDTO {
+  @ApiProperty({
+    description: 'The id of the order associated with the order detail',
+  })
   order: string;
+
+  @ApiProperty({
+    description: 'The id of the product associated with the order detail',
+  })
   product: string;
+
+  @ApiProperty({
+    description: 'The id of the location where the order was shipped from',
+  })
   shippedFrom: string;
+
+  @ApiProperty({ description: 'The quantity of products ordered' })
   quantity: number;
 
   constructor(

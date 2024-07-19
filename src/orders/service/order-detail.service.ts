@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { OrderDetailRepository } from '../repository/order-detail.repository';
 import { OrderDetail } from '../domain/order-detail.domain';
 
@@ -10,11 +10,16 @@ export class OrderDetailService {
     return this.orderDetailRepository.getAllOrderDetails();
   }
 
-  getOrderDetailById(
+  async getOrderDetailById(
     orderId: string,
     productId: string,
   ): Promise<OrderDetail | null> {
-    return this.orderDetailRepository.getOrderDetailById(orderId, productId);
+    const orderDetail: OrderDetail =
+      await this.orderDetailRepository.getOrderDetailById(orderId, productId);
+    if (!orderDetail) {
+      throw new NotFoundException('The order detail was not found');
+    }
+    return orderDetail;
   }
 
   async createOrderDetail(orderDetail: OrderDetail): Promise<OrderDetail> {
