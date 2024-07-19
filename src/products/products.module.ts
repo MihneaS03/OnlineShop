@@ -16,6 +16,9 @@ import { StockRepository } from './repository/stock.repository';
 import { StockService } from './service/stock.service';
 import { StockMapper } from './mapper/stock.mapper';
 import { StockController } from './controller/stock.controller';
+import { LocationService } from './service/location.service';
+import { LocationRepository } from './repository/location.repository';
+import { LocationMapper } from './mapper/location.mapper';
 
 @Module({
   imports: [
@@ -31,7 +34,11 @@ import { StockController } from './controller/stock.controller';
     StockRepository,
     StockService,
     StockMapper,
+    LocationRepository,
+    LocationService,
+    LocationMapper,
   ],
   controllers: [ProductController, ProductCategoryController, StockController],
+  exports: [ProductService, LocationService],
 })
 export class ProductsModule {}

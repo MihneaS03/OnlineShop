@@ -7,10 +7,25 @@ import { OrderRepository } from './repository/order.repository';
 import { OrderService } from './service/order.service';
 import { OrderController } from './controller/order.controller';
 import { OrderMapper } from './mapper/order.mapper';
+import { OrderDetailRepository } from './repository/order-detail.repository';
+import { OrderDetailService } from './service/order-detail.service';
+import { OrderDetailMapper } from './mapper/order-detail.mapper';
+import { ProductsModule } from 'src/products/products.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Order, OrderDetail]), CustomersModule],
-  providers: [OrderRepository, OrderService, OrderMapper],
+  imports: [
+    TypeOrmModule.forFeature([Order, OrderDetail]),
+    CustomersModule,
+    ProductsModule,
+  ],
+  providers: [
+    OrderRepository,
+    OrderService,
+    OrderMapper,
+    OrderDetailRepository,
+    OrderDetailService,
+    OrderDetailMapper,
+  ],
   controllers: [OrderController],
 })
 export class OrdersModule {}

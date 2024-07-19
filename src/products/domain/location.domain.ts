@@ -22,9 +22,23 @@ export class Location {
   @Column({ name: 'Address.StreetAddress' })
   addressStreet: string;
 
-  @OneToMany(() => OrderDetail, (orderDetail) => orderDetail.location)
+  @OneToMany(() => OrderDetail, (orderDetail) => orderDetail.shippedFrom)
   orderDetails: OrderDetail[];
 
   @OneToMany(() => Stock, (stock) => stock.location)
   stocks: Stock[];
+
+  constructor(
+    name: string,
+    addressCountry: string,
+    addressCity: string,
+    addressCounty: string,
+    addressStreet: string,
+  ) {
+    this.name = name;
+    this.addressCountry = addressCountry;
+    this.addressCity = addressCity;
+    this.addressCounty = addressCounty;
+    this.addressStreet = addressStreet;
+  }
 }

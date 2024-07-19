@@ -12,7 +12,7 @@ export class ProductCategoryService {
     return this.productCategoryRepository.getAllProductCategories();
   }
 
-  getProductCategoryById(id: string): Promise<ProductCategory> {
+  getProductCategoryById(id: string): Promise<ProductCategory | null> {
     return this.productCategoryRepository.getProductCategoryById(id);
   }
 

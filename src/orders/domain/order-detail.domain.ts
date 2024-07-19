@@ -23,8 +23,20 @@ export class OrderDetail {
     eager: true,
   })
   @JoinColumn({ name: 'ShippedFrom' })
-  location: Location;
+  shippedFrom: Location;
 
   @Column({ name: 'Quantity' })
   quantity: number;
+
+  constructor(
+    orderId: string,
+    productId: string,
+    shippedFrom: Location,
+    quantity: number,
+  ) {
+    this.orderId = orderId;
+    this.productId = productId;
+    this.shippedFrom = shippedFrom;
+    this.quantity = quantity;
+  }
 }
