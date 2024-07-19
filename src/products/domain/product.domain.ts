@@ -6,8 +6,8 @@ import {
   JoinColumn,
   OneToMany,
 } from 'typeorm';
-import { ProductCategory } from './productCategory.domain';
-import { OrderDetail } from 'src/orders/domain/orderDetail.domain';
+import { ProductCategory } from './product-category.domain';
+import { OrderDetail } from 'src/orders/domain/order-detail.domain';
 import { Stock } from './stock.domain';
 
 @Entity()

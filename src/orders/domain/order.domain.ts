@@ -7,7 +7,7 @@ import {
   JoinColumn,
   OneToMany,
 } from 'typeorm';
-import { OrderDetail } from './orderDetail.domain';
+import { OrderDetail } from './order-detail.domain';
 
 @Entity()
 export class Order {

@@ -12,8 +12,8 @@ import { ProductMapper } from '../mapper/product.mapper';
 import { Product } from '../domain/product.domain';
 import { ProductDTO } from '../dto/product.dto';
 import { CreateProductDTO } from '../dto/create-product.dto';
-import { ProductCategoryService } from '../service/productCategory.service';
-import { ProductCategory } from '../domain/productCategory.domain';
+import { ProductCategoryService } from '../service/product-category.service';
+import { ProductCategory } from '../domain/product-category.domain';
 import { UpdateProductDTO } from '../dto/update-product.dto';
 
 @Controller('products')

@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { ProductCategoryDTO } from '../dto/productCategory.dto';
-import { ProductCategory } from '../domain/productCategory.domain';
-import { CreateProductCategoryDTO } from '../dto/create-productCategory.dto';
-import { UpdateProductCategoryDTO } from '../dto/update-productCategory.dto';
+import { ProductCategoryDTO } from '../dto/product-category.dto';
+import { ProductCategory } from '../domain/product-category.domain';
+import { CreateProductCategoryDTO } from '../dto/create-product-category.dto';
+import { UpdateProductCategoryDTO } from '../dto/update-product-category.dto';
 
 @Injectable()
 export class ProductCategoryMapper {

@@ -7,12 +7,12 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
-import { ProductCategoryService } from '../service/productCategory.service';
-import { ProductCategoryDTO } from '../dto/productCategory.dto';
-import { ProductCategoryMapper } from '../mapper/productCategory.mapper';
-import { ProductCategory } from '../domain/productCategory.domain';
-import { CreateProductCategoryDTO } from '../dto/create-productCategory.dto';
-import { UpdateProductCategoryDTO } from '../dto/update-productCategory.dto';
+import { ProductCategoryService } from '../service/product-category.service';
+import { ProductCategoryDTO } from '../dto/product-category.dto';
+import { ProductCategoryMapper } from '../mapper/product-category.mapper';
+import { ProductCategory } from '../domain/product-category.domain';
+import { CreateProductCategoryDTO } from '../dto/create-product-category.dto';
+import { UpdateProductCategoryDTO } from '../dto/update-product-category.dto';
 
 @Controller('product-categories')
 export class ProductCategoryController {
