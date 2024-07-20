@@ -8,10 +8,11 @@ import { ApiResponse } from '@nestjs/swagger';
 
 @Controller('customers')
 export class CustomerController {
-  constructor(
-    private readonly customerService: CustomerService,
-    private readonly customerMapper: CustomerMapper,
-  ) {}
+  private readonly customerMapper: CustomerMapper;
+
+  constructor(private readonly customerService: CustomerService) {
+    this.customerMapper = new CustomerMapper();
+  }
 
   @Get()
   @ApiResponse({

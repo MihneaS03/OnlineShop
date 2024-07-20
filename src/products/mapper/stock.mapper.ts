@@ -1,17 +1,25 @@
-import { Injectable } from '@nestjs/common';
 import { StockDTO } from '../dto/stock.dto';
 import { Stock } from '../domain/stock.domain';
 import { CreateStockDTO } from '../dto/create-stock.dto';
 import { UpdateStockDTO } from '../dto/update-stock.dto';
+import { LocationDTO } from '../dto/location.dto';
+import { ProductDTO } from '../dto/product.dto';
 
-@Injectable()
 export class StockMapper {
-  mapStockToStockDTO(stock: Stock): StockDTO {
-    return new StockDTO(stock.product.id, stock.location.id, stock.quantity);
+  mapStockToStockDTO(
+    stock: Stock,
+    productDTO: ProductDTO,
+    locationDTO: LocationDTO,
+  ): StockDTO {
+    return new StockDTO(productDTO, locationDTO, stock.quantity);
   }
 
-  mapStockDTOToStock(stockDTO: StockDTO): Stock {
-    return new Stock(stockDTO.product, stockDTO.location, stockDTO.quantity);
+  mapStockDTOToStock(
+    stockDTO: StockDTO,
+    productId: string,
+    locationId: string,
+  ): Stock {
+    return new Stock(productId, locationId, stockDTO.quantity);
   }
 
   mapStockToCreateStockDTO(stock: Stock): CreateStockDTO {

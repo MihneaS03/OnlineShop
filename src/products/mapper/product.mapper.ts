@@ -1,13 +1,22 @@
-import { Injectable } from '@nestjs/common';
 import { Product } from '../domain/product.domain';
 import { ProductDTO } from '../dto/product.dto';
 import { ProductCategory } from '../domain/product-category.domain';
 import { CreateProductDTO } from '../dto/create-product.dto';
 import { UpdateProductDTO } from '../dto/update-product.dto';
+import { ProductCategoryMapper } from './product-category.mapper';
+import { ProductCategoryDTO } from '../dto/product-category.dto';
 
-@Injectable()
 export class ProductMapper {
-  mapProductToProductDTO(product: Product): ProductDTO {
+  private readonly productCategoryMapper: ProductCategoryMapper;
+
+  constructor() {
+    this.productCategoryMapper = new ProductCategoryMapper();
+  }
+
+  mapProductToProductDTO(
+    product: Product,
+    productCategoryDTO: ProductCategoryDTO,
+  ): ProductDTO {
     return new ProductDTO(
       product.name,
       product.description,
@@ -15,7 +24,7 @@ export class ProductMapper {
       product.weight,
       product.supplier,
       product.imageUrl,
-      product.category.id,
+      productCategoryDTO,
     );
   }
 

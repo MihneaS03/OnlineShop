@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { ProductCategoryDTO } from './product-category.dto';
 
 export class ProductDTO {
   @ApiProperty({ description: 'The name of the product' })
@@ -19,8 +20,8 @@ export class ProductDTO {
   @ApiProperty({ description: 'The url of the image belonging to the product' })
   imageUrl: string;
 
-  @ApiProperty({ description: 'The id of the category of the product' })
-  category: string;
+  @ApiProperty({ description: 'The category of the product' })
+  category: ProductCategoryDTO;
 
   constructor(
     name: string,
@@ -29,7 +30,7 @@ export class ProductDTO {
     weight: number,
     supplier: string,
     imageUrl: string,
-    category: string,
+    category: ProductCategoryDTO,
   ) {
     this.name = name;
     this.description = description;

@@ -1,9 +1,7 @@
 import { CustomerDTO } from '../dto/customer.dto';
 import { Customer } from '../domain/customer.domain';
 import { CreateCustomerDTO } from '../dto/create-customer.dto';
-import { Injectable } from '@nestjs/common';
 
-@Injectable()
 export class CustomerMapper {
   mapCustomerToCustomerDTO(customer: Customer): CustomerDTO {
     return new CustomerDTO(

@@ -16,14 +16,20 @@ import { ProductCategoryService } from '../service/product-category.service';
 import { ProductCategory } from '../domain/product-category.domain';
 import { UpdateProductDTO } from '../dto/update-product.dto';
 import { ApiResponse } from '@nestjs/swagger';
+import { ProductCategoryMapper } from '../mapper/product-category.mapper';
 
 @Controller('products')
 export class ProductController {
+  private readonly productMapper: ProductMapper;
+  private readonly productCategoryMapper: ProductCategoryMapper;
+
   constructor(
     private readonly productService: ProductService,
     private readonly productCategoryService: ProductCategoryService,
-    private readonly productMapper: ProductMapper,
-  ) {}
+  ) {
+    this.productMapper = new ProductMapper();
+    this.productCategoryMapper = new ProductCategoryMapper();
+  }
 
   @Get()
   @ApiResponse({
@@ -33,7 +39,12 @@ export class ProductController {
   async getAllProducts(): Promise<ProductDTO[]> {
     const allProducts: Product[] = await this.productService.getAllProducts();
     return allProducts.map((product) =>
-      this.productMapper.mapProductToProductDTO(product),
+      this.productMapper.mapProductToProductDTO(
+        product,
+        this.productCategoryMapper.mapProductCategoryToProductCategoryDTO(
+          product.category,
+        ),
+      ),
     );
   }
 
@@ -48,7 +59,12 @@ export class ProductController {
   })
   async getProductById(@Param('id') id: string): Promise<ProductDTO> {
     const product: Product = await this.productService.getProductById(id);
-    return this.productMapper.mapProductToProductDTO(product);
+    return this.productMapper.mapProductToProductDTO(
+      product,
+      this.productCategoryMapper.mapProductCategoryToProductCategoryDTO(
+        product.category,
+      ),
+    );
   }
 
   @Post()

@@ -1,10 +1,8 @@
-import { Injectable } from '@nestjs/common';
 import { LocationDTO } from '../dto/location.dto';
 import { Location } from '../domain/location.domain';
 import { CreateLocationDTO } from '../dto/create-location.dto';
 import { UpdateLocationDTO } from '../dto/update-location.dto';
 
-@Injectable()
 export class LocationMapper {
   mapLocationToLocationDTO(location: Location): LocationDTO {
     return new LocationDTO(

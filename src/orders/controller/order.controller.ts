@@ -18,11 +18,14 @@ import { ApiResponse } from '@nestjs/swagger';
 
 @Controller('orders')
 export class OrderController {
+  private readonly orderMapper: OrderMapper;
+
   constructor(
     private readonly orderService: OrderService,
     private readonly customerService: CustomerService,
-    private readonly orderMapper: OrderMapper,
-  ) {}
+  ) {
+    this.orderMapper = new OrderMapper();
+  }
 
   @Get()
   @ApiResponse({

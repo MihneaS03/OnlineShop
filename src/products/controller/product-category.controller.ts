@@ -17,10 +17,11 @@ import { ApiResponse } from '@nestjs/swagger';
 
 @Controller('product-categories')
 export class ProductCategoryController {
-  constructor(
-    private readonly productCategoryService: ProductCategoryService,
-    private readonly productCategoryMapper: ProductCategoryMapper,
-  ) {}
+  private readonly productCategoryMapper: ProductCategoryMapper;
+
+  constructor(private readonly productCategoryService: ProductCategoryService) {
+    this.productCategoryMapper = new ProductCategoryMapper();
+  }
 
   @Get()
   @ApiResponse({

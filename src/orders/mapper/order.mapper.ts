@@ -1,11 +1,9 @@
-import { Injectable } from '@nestjs/common';
 import { OrderDTO } from '../dto/order.dto';
 import { Order } from '../domain/order.domain';
 import { Customer } from 'src/customers/domain/customer.domain';
 import { CreateOrderDTO } from '../dto/create-order.dto';
 import { UpdateOrderDTO } from '../dto/update-order.dto';
 
-@Injectable()
 export class OrderMapper {
   mapOrderToOrderDTO(order: Order): OrderDTO {
     return new OrderDTO(
