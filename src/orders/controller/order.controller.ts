@@ -15,16 +15,19 @@ import { CreateOrderDTO } from '../dto/create-order.dto';
 import { CustomerService } from 'src/customers/service/customer.service';
 import { UpdateOrderDTO } from '../dto/update-order.dto';
 import { ApiResponse } from '@nestjs/swagger';
+import { CustomerMapper } from 'src/customers/mapper/customer.mapper';
 
 @Controller('orders')
 export class OrderController {
   private readonly orderMapper: OrderMapper;
+  private readonly customerMapper: CustomerMapper;
 
   constructor(
     private readonly orderService: OrderService,
     private readonly customerService: CustomerService,
   ) {
     this.orderMapper = new OrderMapper();
+    this.customerMapper = new CustomerMapper();
   }
 
   @Get()
@@ -34,7 +37,22 @@ export class OrderController {
   })
   async getAllOrders(): Promise<OrderDTO[]> {
     const allOrders: Order[] = await this.orderService.getAllOrders();
-    return allOrders.map((order) => this.orderMapper.mapOrderToOrderDTO(order));
+    const allOrdersDTO: OrderDTO[] = [];
+
+    for (const order of allOrders) {
+      const customer = await this.customerService.getCustomerById(
+        order.customer.id,
+      );
+
+      allOrdersDTO.push(
+        this.orderMapper.mapOrderToOrderDTO(
+          order,
+          this.customerMapper.mapCustomerToCustomerDTO(customer),
+        ),
+      );
+    }
+
+    return allOrdersDTO;
   }
 
   @Get(':id')
@@ -48,7 +66,14 @@ export class OrderController {
   })
   async getOrderById(@Param('id') id: string): Promise<OrderDTO> {
     const order: Order = await this.orderService.getOrderById(id);
-    return this.orderMapper.mapOrderToOrderDTO(order);
+    const customer = await this.customerService.getCustomerById(
+      order.customer.id,
+    );
+
+    return this.orderMapper.mapOrderToOrderDTO(
+      order,
+      this.customerMapper.mapCustomerToCustomerDTO(customer),
+    );
   }
 
   @Post()

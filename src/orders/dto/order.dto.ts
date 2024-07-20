@@ -1,8 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { CustomerDTO } from 'src/customers/dto/customer.dto';
 
 export class OrderDTO {
-  @ApiProperty({ description: 'The id of the customer that placed the order' })
-  customer: string;
+  @ApiProperty({ description: 'The customer that placed the order' })
+  customer: CustomerDTO;
 
   @ApiProperty({ description: 'The date when the order was created' })
   createdAt: Date;
@@ -20,7 +21,7 @@ export class OrderDTO {
   addressStreet: string;
 
   constructor(
-    customer: string,
+    customer: CustomerDTO,
     createdAt: Date,
     addressCountry: string,
     addressCity: string,
