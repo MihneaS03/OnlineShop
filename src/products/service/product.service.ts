@@ -1,10 +1,19 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { ProductRepository } from '../repository/product.repository';
 import { Product } from '../domain/product.domain';
+import { ProductCategory } from '../domain/product-category.domain';
+import { ProductCategoryService } from './product-category.service';
 
 @Injectable()
 export class ProductService {
-  constructor(private readonly productRepository: ProductRepository) {}
+  constructor(
+    private readonly productRepository: ProductRepository,
+    private readonly productCategoryService: ProductCategoryService,
+  ) {}
 
   getAllProducts(): Promise<Product[]> {
     return this.productRepository.getAllProducts();
@@ -19,10 +28,30 @@ export class ProductService {
   }
 
   async createProduct(product: Product): Promise<Product> {
+    const productCategory: ProductCategory =
+      await this.productCategoryService.getProductCategoryById(
+        product.category.id,
+      );
+    if (!productCategory) {
+      throw new BadRequestException(
+        'The product category selected for this product does not exist',
+      );
+    }
+
     return await this.productRepository.createProduct(product);
   }
 
   async updateProduct(id: string, newProduct: Product): Promise<Product> {
+    const productCategory: ProductCategory =
+      await this.productCategoryService.getProductCategoryById(
+        newProduct.category.id,
+      );
+    if (!productCategory) {
+      throw new BadRequestException(
+        'The product category selected for this product does not exist',
+      );
+    }
+
     return await this.productRepository.updateProduct(id, newProduct);
   }
 

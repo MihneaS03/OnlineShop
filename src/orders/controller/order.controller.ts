@@ -16,17 +16,24 @@ import { CustomerService } from 'src/customers/service/customer.service';
 import { UpdateOrderDTO } from '../dto/update-order.dto';
 import { ApiResponse } from '@nestjs/swagger';
 import { CustomerMapper } from 'src/customers/mapper/customer.mapper';
+import { OrderDetailMapper } from '../mapper/order-detail.mapper';
+import { LocationService } from 'src/products/service/location.service';
+import { OrderDetail } from '../domain/order-detail.domain';
+import { Location } from 'src/products/domain/location.domain';
 
 @Controller('orders')
 export class OrderController {
   private readonly orderMapper: OrderMapper;
+  private readonly orderDetailMapper: OrderDetailMapper;
   private readonly customerMapper: CustomerMapper;
 
   constructor(
     private readonly orderService: OrderService,
     private readonly customerService: CustomerService,
+    private readonly locationService: LocationService,
   ) {
     this.orderMapper = new OrderMapper();
+    this.orderDetailMapper = new OrderDetailMapper();
     this.customerMapper = new CustomerMapper();
   }
 
@@ -85,8 +92,10 @@ export class OrderController {
     const customer = await this.customerService.getCustomerById(
       createOrderDTO.customer,
     );
+
     return await this.orderService.createOrder(
       this.orderMapper.mapCreateOrderDTOToOrder(createOrderDTO, customer),
+      createOrderDTO.orderProducts,
     );
   }
 
@@ -106,9 +115,25 @@ export class OrderController {
     const customer = await this.customerService.getCustomerById(
       updateOrderDTO.customer,
     );
+
+    const orderDetails: OrderDetail[] = [];
+    for (const orderDetail of updateOrderDTO.orderDetails) {
+      const shippedFrom: Location = await this.locationService.getLocationById(
+        orderDetail.shippedFrom,
+      );
+
+      orderDetails.push(
+        this.orderDetailMapper.mapUpdateOrderDetailDTOToOrderDetail(
+          orderDetail,
+          shippedFrom,
+        ),
+      );
+    }
+
     return await this.orderService.updateOrder(
       id,
       this.orderMapper.mapUpdateOrderDTOToOrder(updateOrderDTO, customer),
+      orderDetails,
     );
   }
 

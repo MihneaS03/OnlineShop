@@ -14,6 +14,12 @@ export class OrderDetailRepository {
     return this.orderDetailRepository.find();
   }
 
+  getAllOrderDetailsOfOrder(orderId: string) {
+    return this.orderDetailRepository.find({
+      where: { orderId },
+    });
+  }
+
   getOrderDetailById(
     orderId: string,
     productId: string,

@@ -1,5 +1,17 @@
 import { ApiProperty } from '@nestjs/swagger';
 
+export class OrderProduct {
+  productId: string;
+  shippedFrom: string;
+  quantity: number;
+
+  constructor(productId: string, locationId: string, quantity: number) {
+    this.productId = productId;
+    this.shippedFrom = locationId;
+    this.quantity = quantity;
+  }
+}
+
 export class CreateOrderDTO {
   @ApiProperty({ description: 'The id of the customer that placed the order' })
   customer: string;
@@ -15,6 +27,9 @@ export class CreateOrderDTO {
 
   @ApiProperty({ description: 'The street destination of the order' })
   addressStreet: string;
+
+  @ApiProperty({ description: 'The order details associated to the order' })
+  orderProducts: OrderProduct[];
 
   constructor(
     customer: string,

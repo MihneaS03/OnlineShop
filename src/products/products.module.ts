@@ -39,6 +39,6 @@ import { LocationMapper } from './mapper/location.mapper';
     LocationMapper,
   ],
   controllers: [ProductController, ProductCategoryController, StockController],
-  exports: [ProductService, LocationService],
+  exports: [ProductService, LocationService, StockService],
 })
 export class ProductsModule {}

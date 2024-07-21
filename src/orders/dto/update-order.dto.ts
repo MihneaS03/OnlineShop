@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { UpdateOrderDetailDTO } from './update-order-detail.dto';
 
 export class UpdateOrderDTO {
   @ApiProperty({ description: 'The id of the customer that placed the order' })
@@ -15,6 +16,9 @@ export class UpdateOrderDTO {
 
   @ApiProperty({ description: 'The street destination of the order' })
   addressStreet: string;
+
+  @ApiProperty({ description: 'The order details associated to the order' })
+  orderDetails: UpdateOrderDetailDTO[];
 
   constructor(
     customer: string,

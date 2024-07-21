@@ -12,13 +12,13 @@ export class Customer {
   @Column({ name: 'LastName' })
   lastName: string;
 
-  @Column({ name: 'Username' })
+  @Column({ name: 'Username', unique: true })
   username: string;
 
   @Column({ name: 'Password' })
   password: string;
 
-  @Column({ name: 'EmailAddress' })
+  @Column({ name: 'EmailAddress', unique: true })
   emailAddress: string;
 
   @OneToMany(() => Order, (order) => order.customer)
