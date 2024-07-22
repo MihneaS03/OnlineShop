@@ -7,6 +7,7 @@ import { SharedModule } from './shared/shared.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { Customer } from './customers/domain/customer.domain';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { Customer } from './customers/domain/customer.domain';
       synchronize: true,
       autoLoadEntities: true, //used to automatically load entities
     }),
+    AuthModule,
   ],
   controllers: [HealthController],
   providers: [],
