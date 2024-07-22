@@ -13,28 +13,25 @@ import { ProductCategoryMapper } from '../mapper/product-category.mapper';
 import { ProductCategory } from '../domain/product-category.domain';
 import { CreateProductCategoryDTO } from '../dto/create-product-category.dto';
 import { UpdateProductCategoryDTO } from '../dto/update-product-category.dto';
-import { ApiResponse } from '@nestjs/swagger';
+import { ApiResponse, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('product-categories')
 @Controller('product-categories')
 export class ProductCategoryController {
-  private readonly productCategoryMapper: ProductCategoryMapper;
-
-  constructor(private readonly productCategoryService: ProductCategoryService) {
-    this.productCategoryMapper = new ProductCategoryMapper();
-  }
+  constructor(
+    private readonly productCategoryService: ProductCategoryService,
+  ) {}
 
   @Get()
   @ApiResponse({
     status: 200,
     description: 'The categories were succesfully retrieved',
   })
-  async getAllProductCategories(): Promise<ProductCategoryDTO[]> {
+  async getAll(): Promise<ProductCategoryDTO[]> {
     const allProductCategories: ProductCategory[] =
-      await this.productCategoryService.getAllProductCategories();
+      await this.productCategoryService.getAll();
     return allProductCategories.map((productCategory) =>
-      this.productCategoryMapper.mapProductCategoryToProductCategoryDTO(
-        productCategory,
-      ),
+      ProductCategoryMapper.toDTO(productCategory),
     );
   }
 
@@ -47,14 +44,9 @@ export class ProductCategoryController {
     status: 404,
     description: 'The category was not found',
   })
-  async getProductCategoryById(
-    @Param('id') id: string,
-  ): Promise<ProductCategoryDTO> {
-    const productCategory =
-      await this.productCategoryService.getProductCategoryById(id);
-    return this.productCategoryMapper.mapProductCategoryToProductCategoryDTO(
-      productCategory,
-    );
+  async getById(@Param('id') id: string): Promise<ProductCategoryDTO> {
+    const productCategory = await this.productCategoryService.getById(id);
+    return ProductCategoryMapper.toDTO(productCategory);
   }
 
   @Post()
@@ -62,13 +54,11 @@ export class ProductCategoryController {
     status: 201,
     description: 'The category was succesfully created',
   })
-  async createProductCategory(
+  async create(
     @Body() createProductCategoryDTO: CreateProductCategoryDTO,
   ): Promise<ProductCategory> {
-    return await this.productCategoryService.createProductCategory(
-      this.productCategoryMapper.mapCreateProductCategoryDTOToProductCategory(
-        createProductCategoryDTO,
-      ),
+    return await this.productCategoryService.create(
+      ProductCategoryMapper.createDTOToEntity(createProductCategoryDTO),
     );
   }
 
@@ -81,15 +71,13 @@ export class ProductCategoryController {
     status: 404,
     description: 'The category was not found',
   })
-  async updateProductCategory(
+  async update(
     @Param('id') id: string,
     @Body() updateProductCategoryDTO: UpdateProductCategoryDTO,
   ): Promise<ProductCategory> {
-    return await this.productCategoryService.updateProductCategory(
+    return await this.productCategoryService.update(
       id,
-      this.productCategoryMapper.mapUpdateProductCategoryDTOToProductCategory(
-        updateProductCategoryDTO,
-      ),
+      ProductCategoryMapper.updateDTOToEntity(updateProductCategoryDTO),
     );
   }
 
@@ -102,7 +90,7 @@ export class ProductCategoryController {
     status: 404,
     description: 'The category was not found',
   })
-  async removeProductCategory(@Param('id') id: string): Promise<void> {
-    await this.productCategoryService.removeProductCategory(id);
+  async remove(@Param('id') id: string): Promise<void> {
+    await this.productCategoryService.remove(id);
   }
 }

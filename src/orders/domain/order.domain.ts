@@ -11,26 +11,26 @@ import { OrderDetail } from './order-detail.domain';
 
 @Entity()
 export class Order {
-  @PrimaryGeneratedColumn('uuid', { name: 'Id' })
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({ name: 'CreatedAt' })
+  @Column({ name: 'created_at' })
   createdAt: Date;
 
-  @Column({ name: 'Address.Country' })
+  @Column({ name: 'address_country' })
   addressCountry: string;
 
-  @Column({ name: 'Address.City' })
+  @Column({ name: 'address_city' })
   addressCity: string;
 
-  @Column({ name: 'Address.County' })
+  @Column({ name: 'address_county' })
   addressCounty: string;
 
-  @Column({ name: 'Address.StreetAddress' })
+  @Column({ name: 'address_street' })
   addressStreet: string;
 
   @ManyToOne(() => Customer, (customer) => customer.orders, { eager: true })
-  @JoinColumn({ name: 'Customer' })
+  @JoinColumn({ name: 'customer' })
   customer: Customer;
 
   @OneToMany(() => OrderDetail, (orderDetail) => orderDetail.order)

@@ -4,7 +4,7 @@ import { CreateLocationDTO } from '../dto/create-location.dto';
 import { UpdateLocationDTO } from '../dto/update-location.dto';
 
 export class LocationMapper {
-  mapLocationToLocationDTO(location: Location): LocationDTO {
+  static toDTO(location: Location): LocationDTO {
     return new LocationDTO(
       location.name,
       location.addressCountry,
@@ -14,7 +14,7 @@ export class LocationMapper {
     );
   }
 
-  mapLocationDTOToLocation(locationDTO: LocationDTO): Location {
+  static toEntity(locationDTO: LocationDTO): Location {
     return new Location(
       locationDTO.name,
       locationDTO.addressCountry,
@@ -24,7 +24,7 @@ export class LocationMapper {
     );
   }
 
-  mapLocationToCreateLocationDTO(location: Location): CreateLocationDTO {
+  static toCreateDTO(location: Location): CreateLocationDTO {
     return new CreateLocationDTO(
       location.name,
       location.addressCountry,
@@ -34,9 +34,7 @@ export class LocationMapper {
     );
   }
 
-  mapCreateLocationDTOToLocation(
-    createLocationDTO: CreateLocationDTO,
-  ): Location {
+  static createDTOToEntity(createLocationDTO: CreateLocationDTO): Location {
     return new Location(
       createLocationDTO.name,
       createLocationDTO.addressCountry,
@@ -46,7 +44,7 @@ export class LocationMapper {
     );
   }
 
-  mapLocationToUpdateLocationDTO(location: Location): UpdateLocationDTO {
+  static toUpdateDTO(location: Location): UpdateLocationDTO {
     return new UpdateLocationDTO(
       location.name,
       location.addressCountry,
@@ -56,9 +54,7 @@ export class LocationMapper {
     );
   }
 
-  mapUpdateLocationDTOToLocation(
-    updateLocationDTO: UpdateLocationDTO,
-  ): Location {
+  static updateDTOToEntity(updateLocationDTO: UpdateLocationDTO): Location {
     return new Location(
       updateLocationDTO.name,
       updateLocationDTO.addressCountry,

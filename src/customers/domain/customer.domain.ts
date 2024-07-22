@@ -3,22 +3,22 @@ import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 
 @Entity()
 export class Customer {
-  @PrimaryGeneratedColumn('uuid', { name: 'Id' })
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({ name: 'FirstName' })
+  @Column({ name: 'first_name' })
   firstName: string;
 
-  @Column({ name: 'LastName' })
+  @Column({ name: 'last_name' })
   lastName: string;
 
-  @Column({ name: 'Username', unique: true })
+  @Column({ unique: true })
   username: string;
 
-  @Column({ name: 'Password' })
+  @Column()
   password: string;
 
-  @Column({ name: 'EmailAddress', unique: true })
+  @Column({ name: 'email_address', unique: true })
   emailAddress: string;
 
   @OneToMany(() => Order, (order) => order.customer)

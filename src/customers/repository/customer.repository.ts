@@ -10,19 +10,19 @@ export class CustomerRepository {
     private readonly customerRepository: Repository<Customer>,
   ) {}
 
-  getAllCustomers(): Promise<Customer[]> {
+  async getAll(): Promise<Customer[]> {
     return this.customerRepository.find();
   }
 
-  getCustomerById(id: string): Promise<Customer | null> {
+  async getById(id: string): Promise<Customer | null> {
     return this.customerRepository.findOneBy({ id });
   }
 
-  async createCustomer(customer: Customer): Promise<Customer> {
+  async create(customer: Customer): Promise<Customer> {
     return await this.customerRepository.save(customer);
   }
 
-  async removeCustomer(id: string): Promise<void> {
+  async remove(id: string): Promise<void> {
     await this.customerRepository.delete(id);
   }
 }

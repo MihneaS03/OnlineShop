@@ -6,7 +6,7 @@ import { UpdateOrderDTO } from '../dto/update-order.dto';
 import { CustomerDTO } from 'src/customers/dto/customer.dto';
 
 export class OrderMapper {
-  mapOrderToOrderDTO(order: Order, customerDTO: CustomerDTO): OrderDTO {
+  static toDTO(order: Order, customerDTO: CustomerDTO): OrderDTO {
     return new OrderDTO(
       customerDTO,
       order.createdAt,
@@ -17,7 +17,7 @@ export class OrderMapper {
     );
   }
 
-  mapOrderDTOToOrder(orderDTO: OrderDTO, customer: Customer): Order {
+  static toEntity(orderDTO: OrderDTO, customer: Customer): Order {
     return new Order(
       customer,
       orderDTO.addressCountry,
@@ -28,7 +28,7 @@ export class OrderMapper {
     );
   }
 
-  mapOrderToCreateOrderDTO(order: Order): CreateOrderDTO {
+  static toCreateDTO(order: Order): CreateOrderDTO {
     return new CreateOrderDTO(
       order.customer.id,
       order.addressCountry,
@@ -38,7 +38,7 @@ export class OrderMapper {
     );
   }
 
-  mapCreateOrderDTOToOrder(
+  static createDTOToEntity(
     createOrderDTO: CreateOrderDTO,
     customer: Customer,
   ): Order {
@@ -51,7 +51,7 @@ export class OrderMapper {
     );
   }
 
-  mapOrderToUpdateOrderDTO(order: Order): UpdateOrderDTO {
+  static toUpdateDTO(order: Order): UpdateOrderDTO {
     return new UpdateOrderDTO(
       order.customer.id,
       order.addressCountry,
@@ -61,7 +61,7 @@ export class OrderMapper {
     );
   }
 
-  mapUpdateOrderDTOToOrder(
+  static updateDTOToEntity(
     updateOrderDTO: UpdateOrderDTO,
     customer: Customer,
   ): Order {

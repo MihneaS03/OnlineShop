@@ -15,35 +15,28 @@ import { CreateProductDTO } from '../dto/create-product.dto';
 import { ProductCategoryService } from '../service/product-category.service';
 import { ProductCategory } from '../domain/product-category.domain';
 import { UpdateProductDTO } from '../dto/update-product.dto';
-import { ApiResponse } from '@nestjs/swagger';
+import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ProductCategoryMapper } from '../mapper/product-category.mapper';
 
+@ApiTags('products')
 @Controller('products')
 export class ProductController {
-  private readonly productMapper: ProductMapper;
-  private readonly productCategoryMapper: ProductCategoryMapper;
-
   constructor(
     private readonly productService: ProductService,
     private readonly productCategoryService: ProductCategoryService,
-  ) {
-    this.productMapper = new ProductMapper();
-    this.productCategoryMapper = new ProductCategoryMapper();
-  }
+  ) {}
 
   @Get()
   @ApiResponse({
     status: 200,
     description: 'The products were succesfully retrieved',
   })
-  async getAllProducts(): Promise<ProductDTO[]> {
-    const allProducts: Product[] = await this.productService.getAllProducts();
+  async getAll(): Promise<ProductDTO[]> {
+    const allProducts: Product[] = await this.productService.getAll();
     return allProducts.map((product) =>
-      this.productMapper.mapProductToProductDTO(
+      ProductMapper.toDTO(
         product,
-        this.productCategoryMapper.mapProductCategoryToProductCategoryDTO(
-          product.category,
-        ),
+        ProductCategoryMapper.toDTO(product.category),
       ),
     );
   }
@@ -57,13 +50,11 @@ export class ProductController {
     status: 404,
     description: 'The product was not found',
   })
-  async getProductById(@Param('id') id: string): Promise<ProductDTO> {
-    const product: Product = await this.productService.getProductById(id);
-    return this.productMapper.mapProductToProductDTO(
+  async getById(@Param('id') id: string): Promise<ProductDTO> {
+    const product: Product = await this.productService.getById(id);
+    return ProductMapper.toDTO(
       product,
-      this.productCategoryMapper.mapProductCategoryToProductCategoryDTO(
-        product.category,
-      ),
+      ProductCategoryMapper.toDTO(product.category),
     );
   }
 
@@ -72,18 +63,11 @@ export class ProductController {
     status: 201,
     description: 'The product was succesfully created',
   })
-  async createProduct(
-    @Body() createProductDTO: CreateProductDTO,
-  ): Promise<Product> {
+  async create(@Body() createProductDTO: CreateProductDTO): Promise<Product> {
     const productCategory: ProductCategory =
-      await this.productCategoryService.getProductCategoryById(
-        createProductDTO.category,
-      );
-    return await this.productService.createProduct(
-      this.productMapper.mapCreateProductDTOToProduct(
-        createProductDTO,
-        productCategory,
-      ),
+      await this.productCategoryService.getById(createProductDTO.category);
+    return await this.productService.create(
+      ProductMapper.createDTOToEntity(createProductDTO, productCategory),
     );
   }
 
@@ -96,20 +80,15 @@ export class ProductController {
     status: 404,
     description: 'The product was not found',
   })
-  async updateProduct(
+  async update(
     @Param('id') id: string,
     @Body() updateProductDTO: UpdateProductDTO,
   ): Promise<Product> {
     const productCategory: ProductCategory =
-      await this.productCategoryService.getProductCategoryById(
-        updateProductDTO.category,
-      );
-    return await this.productService.updateProduct(
+      await this.productCategoryService.getById(updateProductDTO.category);
+    return await this.productService.update(
       id,
-      this.productMapper.mapUpdateProductDTOToProduct(
-        updateProductDTO,
-        productCategory,
-      ),
+      ProductMapper.updateDTOToEntity(updateProductDTO, productCategory),
     );
   }
 
@@ -122,7 +101,7 @@ export class ProductController {
     status: 404,
     description: 'The product was not found',
   })
-  async deleteProduct(@Param('id') id: string) {
-    await this.productService.removeProduct(id);
+  async delete(@Param('id') id: string) {
+    await this.productService.remove(id);
   }
 }

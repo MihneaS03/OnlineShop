@@ -11,99 +11,93 @@ export class OrderDetailService {
     private readonly stockService: StockService,
   ) {}
 
-  getAllOrderDetails(): Promise<OrderDetail[]> {
-    return this.orderDetailRepository.getAllOrderDetails();
+  async getAll(): Promise<OrderDetail[]> {
+    return this.orderDetailRepository.getAll();
   }
 
-  getAllOrderDetailsOfOrder(orderId: string): Promise<OrderDetail[]> {
-    return this.orderDetailRepository.getAllOrderDetailsOfOrder(orderId);
+  async getAllOfOrder(orderId: string): Promise<OrderDetail[]> {
+    return this.orderDetailRepository.getAllOfOrder(orderId);
   }
 
-  async getOrderDetailById(
+  async getById(
     orderId: string,
     productId: string,
   ): Promise<OrderDetail | null> {
-    const orderDetail: OrderDetail =
-      await this.orderDetailRepository.getOrderDetailById(orderId, productId);
+    const orderDetail: OrderDetail = await this.orderDetailRepository.getById(
+      orderId,
+      productId,
+    );
     if (!orderDetail) {
       throw new NotFoundException('The order detail was not found');
     }
     return orderDetail;
   }
 
-  async createOrderDetail(orderDetail: OrderDetail): Promise<OrderDetail> {
-    const stock: Stock = await this.stockService.getStockById(
+  async create(orderDetail: OrderDetail): Promise<OrderDetail> {
+    const stock: Stock = await this.stockService.getById(
       orderDetail.productId,
       orderDetail.shippedFrom.id,
     );
 
-    await this.stockService.updateStock(
+    await this.stockService.update(
       orderDetail.productId,
       orderDetail.shippedFrom.id,
       { ...stock, quantity: stock.quantity - orderDetail.quantity },
     );
-    return await this.orderDetailRepository.createOrderDetail(orderDetail);
+    return await this.orderDetailRepository.create(orderDetail);
   }
 
-  async updateOrderDetail(
+  async update(
     orderId: string,
     productId: string,
     newOrderDetail: OrderDetail,
   ): Promise<OrderDetail> {
     const currentOrderDetail: OrderDetail =
-      await this.orderDetailRepository.getOrderDetailById(orderId, productId);
+      await this.orderDetailRepository.getById(orderId, productId);
 
-    const stock: Stock = await this.stockService.getStockById(
+    const stock: Stock = await this.stockService.getById(
       currentOrderDetail.productId,
       currentOrderDetail.shippedFrom.id,
     );
 
-    if (currentOrderDetail.quantity > newOrderDetail.quantity) {
-      await this.stockService.updateStock(
+    const quantityDifference: number =
+      newOrderDetail.quantity - currentOrderDetail.quantity;
+
+    if (quantityDifference !== 0) {
+      await this.stockService.update(
         currentOrderDetail.productId,
         currentOrderDetail.shippedFrom.id,
         {
           ...stock,
-          quantity:
-            stock.quantity +
-            (currentOrderDetail.quantity - newOrderDetail.quantity),
-        },
-      );
-    } else if (currentOrderDetail.quantity < newOrderDetail.quantity) {
-      await this.stockService.updateStock(
-        currentOrderDetail.productId,
-        currentOrderDetail.shippedFrom.id,
-        {
-          ...stock,
-          quantity:
-            stock.quantity -
-            (newOrderDetail.quantity - currentOrderDetail.quantity),
+          quantity: stock.quantity - quantityDifference,
         },
       );
     }
 
-    return await this.orderDetailRepository.updateOrderDetail(
+    return await this.orderDetailRepository.update(
       orderId,
       productId,
       newOrderDetail,
     );
   }
 
-  async removeOrderDetail(orderId: string, productId: string): Promise<void> {
-    const orderDetail: OrderDetail =
-      await this.orderDetailRepository.getOrderDetailById(orderId, productId);
+  async remove(orderId: string, productId: string): Promise<void> {
+    const orderDetail: OrderDetail = await this.orderDetailRepository.getById(
+      orderId,
+      productId,
+    );
 
-    const stock: Stock = await this.stockService.getStockById(
+    const stock: Stock = await this.stockService.getById(
       orderDetail.productId,
       orderDetail.shippedFrom.id,
     );
 
-    await this.stockService.updateStock(
+    await this.stockService.update(
       orderDetail.productId,
       orderDetail.shippedFrom.id,
       { ...stock, quantity: stock.quantity + orderDetail.quantity },
     );
 
-    await this.orderDetailRepository.removeOrderDetail(orderId, productId);
+    await this.orderDetailRepository.remove(orderId, productId);
   }
 }

@@ -10,24 +10,24 @@ export class LocationRepository {
     private readonly locationRepository: Repository<Location>,
   ) {}
 
-  getAllLocations(): Promise<Location[]> {
+  async getAll(): Promise<Location[]> {
     return this.locationRepository.find();
   }
 
-  getLocationById(id: string): Promise<Location | null> {
+  async getById(id: string): Promise<Location | null> {
     return this.locationRepository.findOneBy({ id });
   }
 
-  async createLocation(location: Location): Promise<Location> {
+  async create(location: Location): Promise<Location> {
     return await this.locationRepository.save(location);
   }
 
-  async updateLocation(id: string, newLocation: Location): Promise<Location> {
+  async update(id: string, newLocation: Location): Promise<Location> {
     newLocation.id = id;
     return await this.locationRepository.save(newLocation);
   }
 
-  async removeLocation(id: string): Promise<void> {
+  async remove(id: string): Promise<void> {
     await this.locationRepository.delete(id);
   }
 }

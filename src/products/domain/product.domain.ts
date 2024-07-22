@@ -12,25 +12,25 @@ import { Stock } from './stock.domain';
 
 @Entity()
 export class Product {
-  @PrimaryGeneratedColumn('uuid', { name: 'Id' })
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({ name: 'Name' })
+  @Column()
   name: string;
 
-  @Column({ name: 'Description' })
+  @Column()
   description: string;
 
-  @Column({ name: 'Price' })
+  @Column()
   price: number;
 
-  @Column({ name: 'Weight', type: 'decimal' })
+  @Column({ type: 'decimal' })
   weight: number;
 
-  @Column({ name: 'Supplier' })
+  @Column()
   supplier: string;
 
-  @Column({ name: 'ImageUrl' })
+  @Column({ name: 'image_url' })
   imageUrl: string;
 
   @ManyToOne(
@@ -40,7 +40,7 @@ export class Product {
       eager: true,
     },
   )
-  @JoinColumn({ name: 'Category' })
+  @JoinColumn({ name: 'category' })
   category: ProductCategory;
 
   @OneToMany(() => OrderDetail, (orderDetail) => orderDetail.product)

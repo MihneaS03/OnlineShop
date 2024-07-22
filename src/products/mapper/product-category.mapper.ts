@@ -4,25 +4,21 @@ import { CreateProductCategoryDTO } from '../dto/create-product-category.dto';
 import { UpdateProductCategoryDTO } from '../dto/update-product-category.dto';
 
 export class ProductCategoryMapper {
-  mapProductCategoryToProductCategoryDTO(
-    productCategory: ProductCategory,
-  ): ProductCategoryDTO {
+  static toDTO(productCategory: ProductCategory): ProductCategoryDTO {
     return new ProductCategoryDTO(
       productCategory.name,
       productCategory.description,
     );
   }
 
-  mapProductCategoryDTOToProductCategory(
-    productCategoryDTO: ProductCategoryDTO,
-  ): ProductCategory {
+  static toEntity(productCategoryDTO: ProductCategoryDTO): ProductCategory {
     return new ProductCategory(
       productCategoryDTO.name,
       productCategoryDTO.description,
     );
   }
 
-  mapProductCategoryToCreateProductCategoryDTO(
+  static toCreateDTO(
     productCategory: ProductCategory,
   ): CreateProductCategoryDTO {
     return new CreateProductCategoryDTO(
@@ -31,7 +27,7 @@ export class ProductCategoryMapper {
     );
   }
 
-  mapCreateProductCategoryDTOToProductCategory(
+  static createDTOToEntity(
     createProductCategoryDTO: CreateProductCategoryDTO,
   ): ProductCategory {
     return new ProductCategory(
@@ -40,7 +36,7 @@ export class ProductCategoryMapper {
     );
   }
 
-  mapProductCategoryToUpdateProductCategoryDTO(
+  static toUpdateDTO(
     productCategory: ProductCategory,
   ): UpdateProductCategoryDTO {
     return new UpdateProductCategoryDTO(
@@ -49,7 +45,7 @@ export class ProductCategoryMapper {
     );
   }
 
-  mapUpdateProductCategoryDTOToProductCategory(
+  static updateDTOToEntity(
     updateProductCategoryDTO: UpdateProductCategoryDTO,
   ): ProductCategory {
     return new ProductCategory(

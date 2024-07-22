@@ -5,21 +5,21 @@ import { Location } from 'src/products/domain/location.domain';
 
 @Entity()
 export class Stock {
-  @PrimaryColumn('uuid', { name: 'Product' })
+  @PrimaryColumn('uuid', { name: 'product' })
   productId: string;
 
-  @PrimaryColumn('uuid', { name: 'Location' })
+  @PrimaryColumn('uuid', { name: 'location' })
   locationId: string;
 
   @ManyToOne(() => Product, (product) => product.stocks, { eager: true })
-  @JoinColumn({ name: 'Product' })
+  @JoinColumn({ name: 'product' })
   product: Product;
 
   @ManyToOne(() => Location, (location) => location.stocks, { eager: true })
-  @JoinColumn({ name: 'Location' })
+  @JoinColumn({ name: 'location' })
   location: Location;
 
-  @Column({ name: 'Quantity' })
+  @Column()
   quantity: number;
 
   constructor(productId: string, locationId: string, quantity: number) {

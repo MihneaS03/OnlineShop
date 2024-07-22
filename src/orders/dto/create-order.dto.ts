@@ -1,12 +1,12 @@
 import { ApiProperty, getSchemaPath } from '@nestjs/swagger';
 
 export class OrderProduct {
-  productId: string;
+  product: string;
   shippedFrom: string;
   quantity: number;
 
   constructor(productId: string, locationId: string, quantity: number) {
-    this.productId = productId;
+    this.product = productId;
     this.shippedFrom = locationId;
     this.quantity = quantity;
   }

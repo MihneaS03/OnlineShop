@@ -10,24 +10,24 @@ export class OrderRepository {
     private readonly orderRepository: Repository<Order>,
   ) {}
 
-  getAllOrders(): Promise<Order[]> {
+  async getAll(): Promise<Order[]> {
     return this.orderRepository.find();
   }
 
-  getOrderById(id: string): Promise<Order | null> {
+  async getById(id: string): Promise<Order | null> {
     return this.orderRepository.findOneBy({ id });
   }
 
-  async createOrder(order: Order): Promise<Order> {
+  async create(order: Order): Promise<Order> {
     return await this.orderRepository.save(order);
   }
 
-  async updateOrder(id: string, newOrder: Order): Promise<Order> {
+  async update(id: string, newOrder: Order): Promise<Order> {
     newOrder.id = id;
     return await this.orderRepository.save(newOrder);
   }
 
-  async removeOrder(id: string): Promise<void> {
+  async remove(id: string): Promise<void> {
     await this.orderRepository.delete(id);
   }
 }

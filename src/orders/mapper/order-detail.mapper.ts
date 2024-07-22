@@ -8,7 +8,7 @@ import { Location } from 'src/products/domain/location.domain';
 import { UpdateOrderDetailDTO } from '../dto/update-order-detail.dto';
 
 export class OrderDetailMapper {
-  mapOrderDetailToOrderDetailDTO(
+  static toDTO(
     orderDetail: OrderDetail,
     orderDTO: OrderDTO,
     productDTO: ProductDTO,
@@ -22,7 +22,7 @@ export class OrderDetailMapper {
     );
   }
 
-  mapCreateOrderDetailDTOToOrderDetail(
+  static createDTOToEntity(
     createOrderDetailDTO: CreateOrderDetailDTO,
     shippedFrom: Location,
   ): OrderDetail {
@@ -34,7 +34,7 @@ export class OrderDetailMapper {
     );
   }
 
-  mapUpdateOrderDetailDTOToOrderDetail(
+  static updateDTOToEntity(
     updateOrderDetailDTO: UpdateOrderDetailDTO,
     shippedFrom: Location,
   ): OrderDetail {

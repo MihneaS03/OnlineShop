@@ -18,15 +18,12 @@ export class StockService {
     private readonly locationService: LocationService,
   ) {}
 
-  getAllStocks(): Promise<Stock[]> {
-    return this.stockRepository.getAllStocks();
+  async getAll(): Promise<Stock[]> {
+    return this.stockRepository.getAll();
   }
 
-  async getStockById(
-    productId: string,
-    locationId: string,
-  ): Promise<Stock | null> {
-    const stock: Stock = await this.stockRepository.getStockById(
+  async getById(productId: string, locationId: string): Promise<Stock | null> {
+    const stock: Stock = await this.stockRepository.getById(
       productId,
       locationId,
     );
@@ -36,11 +33,9 @@ export class StockService {
     return stock;
   }
 
-  async createStock(stock: Stock): Promise<Stock> {
-    const product: Product = await this.productService.getProductById(
-      stock.productId,
-    );
-    const location: Location = await this.locationService.getLocationById(
+  async create(stock: Stock): Promise<Stock> {
+    const product: Product = await this.productService.getById(stock.productId);
+    const location: Location = await this.locationService.getById(
       stock.locationId,
     );
 
@@ -56,18 +51,18 @@ export class StockService {
       );
     }
 
-    return await this.stockRepository.createStock(stock);
+    return await this.stockRepository.create(stock);
   }
 
-  async updateStock(
+  async update(
     productId: string,
     locationId: string,
     newStock: Stock,
   ): Promise<Stock> {
-    const product: Product = await this.productService.getProductById(
+    const product: Product = await this.productService.getById(
       newStock.productId,
     );
-    const location: Location = await this.locationService.getLocationById(
+    const location: Location = await this.locationService.getById(
       newStock.locationId,
     );
 
@@ -83,14 +78,10 @@ export class StockService {
       );
     }
 
-    return await this.stockRepository.updateStock(
-      productId,
-      locationId,
-      newStock,
-    );
+    return await this.stockRepository.update(productId, locationId, newStock);
   }
 
-  async removeStock(productId: string, locationId: string): Promise<void> {
-    await this.stockRepository.removeStock(productId, locationId);
+  async remove(productId: string, locationId: string): Promise<void> {
+    await this.stockRepository.remove(productId, locationId);
   }
 }

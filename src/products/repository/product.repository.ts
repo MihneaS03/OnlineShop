@@ -10,24 +10,24 @@ export class ProductRepository {
     private readonly productRepository: Repository<Product>,
   ) {}
 
-  getAllProducts(): Promise<Product[]> {
+  async getAll(): Promise<Product[]> {
     return this.productRepository.find();
   }
 
-  getProductById(id: string): Promise<Product | null> {
+  async getById(id: string): Promise<Product | null> {
     return this.productRepository.findOneBy({ id });
   }
 
-  async createProduct(product: Product): Promise<Product> {
+  async create(product: Product): Promise<Product> {
     return await this.productRepository.save(product);
   }
 
-  async updateProduct(id: string, newProduct: Product): Promise<Product> {
+  async update(id: string, newProduct: Product): Promise<Product> {
     newProduct.id = id;
     return await this.productRepository.save(newProduct);
   }
 
-  async removeProduct(id: string): Promise<void> {
+  async remove(id: string): Promise<void> {
     await this.productRepository.delete(id);
   }
 }

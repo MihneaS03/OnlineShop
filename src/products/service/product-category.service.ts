@@ -8,38 +8,31 @@ export class ProductCategoryService {
     private readonly productCategoryRepository: ProductCategoryRepository,
   ) {}
 
-  getAllProductCategories(): Promise<ProductCategory[]> {
-    return this.productCategoryRepository.getAllProductCategories();
+  async getAll(): Promise<ProductCategory[]> {
+    return this.productCategoryRepository.getAll();
   }
 
-  async getProductCategoryById(id: string): Promise<ProductCategory | null> {
+  async getById(id: string): Promise<ProductCategory | null> {
     const productCategory: ProductCategory =
-      await this.productCategoryRepository.getProductCategoryById(id);
+      await this.productCategoryRepository.getById(id);
     if (!productCategory) {
       throw new NotFoundException('The product category was not found');
     }
     return productCategory;
   }
 
-  async createProductCategory(
-    productCategory: ProductCategory,
-  ): Promise<ProductCategory> {
-    return await this.productCategoryRepository.createProductCategory(
-      productCategory,
-    );
+  async create(productCategory: ProductCategory): Promise<ProductCategory> {
+    return await this.productCategoryRepository.create(productCategory);
   }
 
-  async updateProductCategory(
+  async update(
     id: string,
     newProductCategory: ProductCategory,
   ): Promise<ProductCategory> {
-    return await this.productCategoryRepository.updateProductCategory(
-      id,
-      newProductCategory,
-    );
+    return await this.productCategoryRepository.update(id, newProductCategory);
   }
 
-  async removeProductCategory(id: string): Promise<void> {
-    return await this.productCategoryRepository.removeProductCategory(id);
+  async remove(id: string): Promise<void> {
+    return await this.productCategoryRepository.remove(id);
   }
 }

@@ -5,27 +5,27 @@ import { Location } from 'src/products/domain/location.domain';
 
 @Entity()
 export class OrderDetail {
-  @PrimaryColumn('uuid', { name: 'Order' })
+  @PrimaryColumn('uuid', { name: 'order' })
   orderId: string;
 
-  @PrimaryColumn('uuid', { name: 'Product' })
+  @PrimaryColumn('uuid', { name: 'product' })
   productId: string;
 
   @ManyToOne(() => Order, (order) => order.orderDetails, { eager: true })
-  @JoinColumn({ name: 'Order' })
+  @JoinColumn({ name: 'order' })
   order: Order;
 
   @ManyToOne(() => Product, (product) => product.orderDetails, { eager: true })
-  @JoinColumn({ name: 'Product' })
+  @JoinColumn({ name: 'product' })
   product: Product;
 
   @ManyToOne(() => Location, (location) => location.orderDetails, {
     eager: true,
   })
-  @JoinColumn({ name: 'ShippedFrom' })
+  @JoinColumn({ name: 'shipped_from' })
   shippedFrom: Location;
 
-  @Column({ name: 'Quantity' })
+  @Column()
   quantity: number;
 
   constructor(

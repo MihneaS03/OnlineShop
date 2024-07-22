@@ -3,13 +3,13 @@ import { Product } from './product.domain';
 
 @Entity()
 export class ProductCategory {
-  @PrimaryGeneratedColumn('uuid', { name: 'Id' })
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({ name: 'Name' })
+  @Column()
   name: string;
 
-  @Column({ name: 'Description' })
+  @Column()
   description: string;
 
   @OneToMany(() => Product, (product) => product.category)

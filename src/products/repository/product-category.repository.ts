@@ -10,21 +10,19 @@ export class ProductCategoryRepository {
     private readonly productCategoryRepository: Repository<ProductCategory>,
   ) {}
 
-  getAllProductCategories(): Promise<ProductCategory[]> {
+  async getAll(): Promise<ProductCategory[]> {
     return this.productCategoryRepository.find();
   }
 
-  getProductCategoryById(id: string): Promise<ProductCategory | null> {
+  async getById(id: string): Promise<ProductCategory | null> {
     return this.productCategoryRepository.findOneBy({ id });
   }
 
-  async createProductCategory(
-    productCategory: ProductCategory,
-  ): Promise<ProductCategory> {
+  async create(productCategory: ProductCategory): Promise<ProductCategory> {
     return await this.productCategoryRepository.save(productCategory);
   }
 
-  async updateProductCategory(
+  async update(
     id: string,
     newProductCategory: ProductCategory,
   ): Promise<ProductCategory> {
@@ -32,7 +30,7 @@ export class ProductCategoryRepository {
     return await this.productCategoryRepository.save(newProductCategory);
   }
 
-  async removeProductCategory(id: string): Promise<void> {
+  async remove(id: string): Promise<void> {
     await this.productCategoryRepository.delete(id);
   }
 }

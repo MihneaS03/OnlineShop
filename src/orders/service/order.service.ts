@@ -13,6 +13,7 @@ import { OrderProduct } from '../dto/create-order.dto';
 import { Location } from 'src/products/domain/location.domain';
 import { LocationService } from 'src/products/service/location.service';
 import { CustomerService } from 'src/customers/service/customer.service';
+import { Transactional } from 'typeorm-transactional';
 
 @Injectable()
 export class OrderService {
@@ -24,26 +25,22 @@ export class OrderService {
     private readonly customerService: CustomerService,
   ) {}
 
-  getAllOrders(): Promise<Order[]> {
-    return this.orderRepository.getAllOrders();
+  async getAll(): Promise<Order[]> {
+    return this.orderRepository.getAll();
   }
 
-  async getOrderById(id: string): Promise<Order | null> {
-    const order: Order = await this.orderRepository.getOrderById(id);
+  async getById(id: string): Promise<Order | null> {
+    const order: Order = await this.orderRepository.getById(id);
     if (!order) {
       throw new NotFoundException('The order was not found');
     }
     return order;
   }
 
-  async createOrder(
-    order: Order,
-    orderProducts: OrderProduct[],
-  ): Promise<Order> {
+  @Transactional()
+  async create(order: Order, orderProducts: OrderProduct[]): Promise<Order> {
     order.createdAt = new Date();
-    const customer = await this.customerService.getCustomerById(
-      order.customer.id,
-    );
+    const customer = await this.customerService.getById(order.customer.id);
 
     if (!customer) {
       throw new BadRequestException(
@@ -51,76 +48,89 @@ export class OrderService {
       );
     }
 
-    for (const orderProduct of orderProducts) {
-      const stock: Stock = await this.stockService.getStockById(
-        orderProduct.productId,
-        orderProduct.shippedFrom,
-      );
-
-      if (!stock || stock.quantity < orderProduct.quantity) {
-        throw new BadRequestException(
-          `Insufficient stock for the product ${orderProduct.productId}`,
+    await Promise.all(
+      orderProducts.map(async (orderProduct) => {
+        const stock: Stock = await this.stockService.getById(
+          orderProduct.product,
+          orderProduct.shippedFrom,
         );
-      }
-    }
 
-    const createdOrder: Order = await this.orderRepository.createOrder(order);
+        if (!stock || stock.quantity < orderProduct.quantity) {
+          throw new BadRequestException(
+            `Insufficient stock for the product ${orderProduct.product}`,
+          );
+        }
+      }),
+    );
 
-    for (const orderProduct of orderProducts) {
-      const location: Location = await this.locationService.getLocationById(
-        orderProduct.shippedFrom,
-      );
+    const createdOrder: Order = await this.orderRepository.create(order);
 
-      const orderDetail: OrderDetail = new OrderDetail(
-        createdOrder.id,
-        orderProduct.productId,
-        location,
-        orderProduct.quantity,
-      );
-      await this.orderDetailService.createOrderDetail(orderDetail);
-    }
+    await Promise.all(
+      orderProducts.map(async (orderProduct) => {
+        const location: Location = await this.locationService.getById(
+          orderProduct.shippedFrom,
+        );
+
+        const orderDetail: OrderDetail = new OrderDetail(
+          createdOrder.id,
+          orderProduct.product,
+          location,
+          orderProduct.quantity,
+        );
+        await this.orderDetailService.create(orderDetail);
+      }),
+    );
 
     return createdOrder;
   }
 
-  async updateOrder(
+  @Transactional()
+  async update(
     id: string,
     newOrder: Order,
     orderDetails: OrderDetail[],
   ): Promise<Order> {
-    for (const orderDetail of orderDetails) {
-      const stock: Stock = await this.stockService.getStockById(
-        orderDetail.productId,
-        orderDetail.shippedFrom.id,
-      );
-
-      if (!stock || stock.quantity < orderDetail.quantity) {
-        throw new BadRequestException(
-          `Insufficient stock for the product ${orderDetail.productId}`,
+    await Promise.all(
+      orderDetails.map(async (orderDetail) => {
+        const stock: Stock = await this.stockService.getById(
+          orderDetail.productId,
+          orderDetail.shippedFrom.id,
         );
-      }
-    }
 
-    for (const orderDetail of orderDetails) {
-      await this.orderDetailService.updateOrderDetail(
-        orderDetail.orderId,
-        orderDetail.productId,
-        orderDetail,
-      );
-    }
+        if (!stock || stock.quantity < orderDetail.quantity) {
+          throw new BadRequestException(
+            `Insufficient stock for the product ${orderDetail.productId}`,
+          );
+        }
+      }),
+    );
 
-    return await this.orderRepository.updateOrder(id, newOrder);
+    await Promise.all(
+      orderDetails.map(async (orderDetail) => {
+        await this.orderDetailService.update(
+          orderDetail.orderId,
+          orderDetail.productId,
+          orderDetail,
+        );
+      }),
+    );
+
+    return await this.orderRepository.update(id, newOrder);
   }
 
-  async removeOrder(id: string): Promise<void> {
+  @Transactional()
+  async remove(id: string): Promise<void> {
     const allOrderDetails: OrderDetail[] =
-      await this.orderDetailService.getAllOrderDetailsOfOrder(id);
-    for (const orderDetail of allOrderDetails) {
-      await this.orderDetailService.removeOrderDetail(
-        orderDetail.orderId,
-        orderDetail.productId,
-      );
-    }
-    await this.orderRepository.removeOrder(id);
+      await this.orderDetailService.getAllOfOrder(id);
+
+    await Promise.all(
+      allOrderDetails.map(async (orderDetail) => {
+        await this.orderDetailService.remove(
+          orderDetail.orderId,
+          orderDetail.productId,
+        );
+      }),
+    );
+    await this.orderRepository.remove(id);
   }
 }

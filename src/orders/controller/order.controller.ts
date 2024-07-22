@@ -14,52 +14,37 @@ import { OrderDTO } from '../dto/order.dto';
 import { CreateOrderDTO } from '../dto/create-order.dto';
 import { CustomerService } from 'src/customers/service/customer.service';
 import { UpdateOrderDTO } from '../dto/update-order.dto';
-import { ApiResponse } from '@nestjs/swagger';
+import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CustomerMapper } from 'src/customers/mapper/customer.mapper';
 import { OrderDetailMapper } from '../mapper/order-detail.mapper';
 import { LocationService } from 'src/products/service/location.service';
 import { OrderDetail } from '../domain/order-detail.domain';
 import { Location } from 'src/products/domain/location.domain';
+import { UpdateOrderDetailDTO } from '../dto/update-order-detail.dto';
 
+@ApiTags('orders')
 @Controller('orders')
 export class OrderController {
-  private readonly orderMapper: OrderMapper;
-  private readonly orderDetailMapper: OrderDetailMapper;
-  private readonly customerMapper: CustomerMapper;
-
   constructor(
     private readonly orderService: OrderService,
     private readonly customerService: CustomerService,
     private readonly locationService: LocationService,
-  ) {
-    this.orderMapper = new OrderMapper();
-    this.orderDetailMapper = new OrderDetailMapper();
-    this.customerMapper = new CustomerMapper();
-  }
+  ) {}
 
   @Get()
   @ApiResponse({
     status: 200,
     description: 'The orders were succesfully retrieved',
   })
-  async getAllOrders(): Promise<OrderDTO[]> {
-    const allOrders: Order[] = await this.orderService.getAllOrders();
-    const allOrdersDTO: OrderDTO[] = [];
+  async getAll(): Promise<OrderDTO[]> {
+    const allOrders: Order[] = await this.orderService.getAll();
 
-    for (const order of allOrders) {
-      const customer = await this.customerService.getCustomerById(
-        order.customer.id,
-      );
-
-      allOrdersDTO.push(
-        this.orderMapper.mapOrderToOrderDTO(
-          order,
-          this.customerMapper.mapCustomerToCustomerDTO(customer),
-        ),
-      );
-    }
-
-    return allOrdersDTO;
+    return await Promise.all(
+      allOrders.map(async (order) => {
+        const customer = await this.customerService.getById(order.customer.id);
+        return OrderMapper.toDTO(order, CustomerMapper.toDTO(customer));
+      }),
+    );
   }
 
   @Get(':id')
@@ -71,16 +56,11 @@ export class OrderController {
     status: 404,
     description: 'The order was not found',
   })
-  async getOrderById(@Param('id') id: string): Promise<OrderDTO> {
-    const order: Order = await this.orderService.getOrderById(id);
-    const customer = await this.customerService.getCustomerById(
-      order.customer.id,
-    );
+  async getById(@Param('id') id: string): Promise<OrderDTO> {
+    const order: Order = await this.orderService.getById(id);
+    const customer = await this.customerService.getById(order.customer.id);
 
-    return this.orderMapper.mapOrderToOrderDTO(
-      order,
-      this.customerMapper.mapCustomerToCustomerDTO(customer),
-    );
+    return OrderMapper.toDTO(order, CustomerMapper.toDTO(customer));
   }
 
   @Post()
@@ -88,13 +68,17 @@ export class OrderController {
     status: 201,
     description: 'The order was succesfully created',
   })
-  async createOrder(@Body() createOrderDTO: CreateOrderDTO): Promise<Order> {
-    const customer = await this.customerService.getCustomerById(
+  @ApiResponse({
+    status: 404,
+    description: 'The customer was not found',
+  })
+  async create(@Body() createOrderDTO: CreateOrderDTO): Promise<Order> {
+    const customer = await this.customerService.getById(
       createOrderDTO.customer,
     );
 
-    return await this.orderService.createOrder(
-      this.orderMapper.mapCreateOrderDTOToOrder(createOrderDTO, customer),
+    return await this.orderService.create(
+      OrderMapper.createDTOToEntity(createOrderDTO, customer),
       createOrderDTO.orderProducts,
     );
   }
@@ -108,31 +92,26 @@ export class OrderController {
     status: 404,
     description: 'The order was not found',
   })
-  async updateOrder(
+  async update(
     @Param('id') id: string,
     @Body() updateOrderDTO: UpdateOrderDTO,
   ): Promise<Order> {
-    const customer = await this.customerService.getCustomerById(
+    const customer = await this.customerService.getById(
       updateOrderDTO.customer,
     );
 
-    const orderDetails: OrderDetail[] = [];
-    for (const orderDetail of updateOrderDTO.orderDetails) {
-      const shippedFrom: Location = await this.locationService.getLocationById(
-        orderDetail.shippedFrom,
-      );
+    const orderDetailsDTO: UpdateOrderDetailDTO[] = updateOrderDTO.orderDetails;
+    const orderDetails: OrderDetail[] = await Promise.all(
+      orderDetailsDTO.map(async (orderDetail) => {
+        const shippedFrom: Location =
+          await this.locationService.getById(orderDetail.shippedFrom);
+        return OrderDetailMapper.updateDTOToEntity(orderDetail, shippedFrom);
+      }),
+    );
 
-      orderDetails.push(
-        this.orderDetailMapper.mapUpdateOrderDetailDTOToOrderDetail(
-          orderDetail,
-          shippedFrom,
-        ),
-      );
-    }
-
-    return await this.orderService.updateOrder(
+    return await this.orderService.update(
       id,
-      this.orderMapper.mapUpdateOrderDTOToOrder(updateOrderDTO, customer),
+      OrderMapper.updateDTOToEntity(updateOrderDTO, customer),
       orderDetails,
     );
   }
@@ -146,7 +125,7 @@ export class OrderController {
     status: 404,
     description: 'The order was not found',
   })
-  async removeOrder(@Param('id') id: string) {
-    await this.orderService.removeOrder(id);
+  async remove(@Param('id') id: string) {
+    await this.orderService.remove(id);
   }
 }

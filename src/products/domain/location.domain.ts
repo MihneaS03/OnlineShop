@@ -4,22 +4,22 @@ import { Stock } from './stock.domain';
 
 @Entity()
 export class Location {
-  @PrimaryGeneratedColumn('uuid', { name: 'Id' })
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({ name: 'Name' })
+  @Column()
   name: string;
 
-  @Column({ name: 'Address.Country' })
+  @Column({ name: 'address_country' })
   addressCountry: string;
 
-  @Column({ name: 'Address.City' })
+  @Column({ name: 'address_city' })
   addressCity: string;
 
-  @Column({ name: 'Address.County' })
+  @Column({ name: 'address_county' })
   addressCounty: string;
 
-  @Column({ name: 'Address.StreetAddress' })
+  @Column({ name: 'address_street' })
   addressStreet: string;
 
   @OneToMany(() => OrderDetail, (orderDetail) => orderDetail.shippedFrom)

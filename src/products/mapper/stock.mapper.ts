@@ -6,7 +6,7 @@ import { LocationDTO } from '../dto/location.dto';
 import { ProductDTO } from '../dto/product.dto';
 
 export class StockMapper {
-  mapStockToStockDTO(
+  static toDTO(
     stock: Stock,
     productDTO: ProductDTO,
     locationDTO: LocationDTO,
@@ -14,7 +14,7 @@ export class StockMapper {
     return new StockDTO(productDTO, locationDTO, stock.quantity);
   }
 
-  mapStockDTOToStock(
+  static toEntity(
     stockDTO: StockDTO,
     productId: string,
     locationId: string,
@@ -22,7 +22,7 @@ export class StockMapper {
     return new Stock(productId, locationId, stockDTO.quantity);
   }
 
-  mapStockToCreateStockDTO(stock: Stock): CreateStockDTO {
+  static toCreateDTO(stock: Stock): CreateStockDTO {
     return new CreateStockDTO(
       stock.product.id,
       stock.location.id,
@@ -30,7 +30,7 @@ export class StockMapper {
     );
   }
 
-  mapCreateStockDTOToStock(createStockDTO: CreateStockDTO): Stock {
+  static createDTOToEntity(createStockDTO: CreateStockDTO): Stock {
     return new Stock(
       createStockDTO.product,
       createStockDTO.location,
@@ -38,7 +38,7 @@ export class StockMapper {
     );
   }
 
-  mapStockToUpdateStockDTO(stock: Stock): UpdateStockDTO {
+  static toUpdateDTO(stock: Stock): UpdateStockDTO {
     return new UpdateStockDTO(
       stock.product.id,
       stock.location.id,
@@ -46,7 +46,7 @@ export class StockMapper {
     );
   }
 
-  mapUpdateStockDTOToStock(updateStockDTO: UpdateStockDTO): Stock {
+  static updateDTOToEntity(updateStockDTO: UpdateStockDTO): Stock {
     return new Stock(
       updateStockDTO.product,
       updateStockDTO.location,

@@ -4,27 +4,21 @@ import { CreateCustomerDTO } from '../dto/create-customer.dto';
 import { Customer } from '../domain/customer.domain';
 import { CustomerMapper } from '../mapper/customer.mapper';
 import { CustomerDTO } from '../dto/customer.dto';
-import { ApiResponse } from '@nestjs/swagger';
+import { ApiResponse, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('customers')
 @Controller('customers')
 export class CustomerController {
-  private readonly customerMapper: CustomerMapper;
-
-  constructor(private readonly customerService: CustomerService) {
-    this.customerMapper = new CustomerMapper();
-  }
+  constructor(private readonly customerService: CustomerService) {}
 
   @Get()
   @ApiResponse({
     status: 200,
     description: 'The customers were succesfully retrieved',
   })
-  async getAllCustomers(): Promise<CustomerDTO[]> {
-    const allCustomers: Customer[] =
-      await this.customerService.getAllCustomers();
-    return allCustomers.map((customer) =>
-      this.customerMapper.mapCustomerToCustomerDTO(customer),
-    );
+  async getAll(): Promise<CustomerDTO[]> {
+    const allCustomers: Customer[] = await this.customerService.getAll();
+    return allCustomers.map((customer) => CustomerMapper.toDTO(customer));
   }
 
   @Get(':id')
@@ -36,9 +30,9 @@ export class CustomerController {
     status: 404,
     description: 'The customer was not found',
   })
-  async getCustomerById(@Param('id') id: string): Promise<CustomerDTO> {
-    const customer: Customer = await this.customerService.getCustomerById(id);
-    return this.customerMapper.mapCustomerToCustomerDTO(customer);
+  async getById(@Param('id') id: string): Promise<CustomerDTO> {
+    const customer: Customer = await this.customerService.getById(id);
+    return CustomerMapper.toDTO(customer);
   }
 
   @Post()
@@ -46,11 +40,11 @@ export class CustomerController {
     status: 201,
     description: 'The customer was succesfully created',
   })
-  async createCustomer(
+  async create(
     @Body() createCustomerDTO: CreateCustomerDTO,
   ): Promise<Customer> {
-    return await this.customerService.createCustomer(
-      this.customerMapper.mapCreateCustomerDTOToCustomer(createCustomerDTO),
+    return await this.customerService.create(
+      CustomerMapper.toEntity(createCustomerDTO),
     );
   }
 }

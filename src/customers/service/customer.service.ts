@@ -6,24 +6,23 @@ import { CustomerRepository } from '../repository/customer.repository';
 export class CustomerService {
   constructor(private readonly customerRepository: CustomerRepository) {}
 
-  async getCustomerById(id: string): Promise<Customer | null> {
-    const customer: Customer =
-      await this.customerRepository.getCustomerById(id);
+  async getById(id: string): Promise<Customer | null> {
+    const customer: Customer = await this.customerRepository.getById(id);
     if (!customer) {
       throw new NotFoundException('The customer was not found');
     }
     return customer;
   }
 
-  getAllCustomers(): Promise<Customer[]> {
-    return this.customerRepository.getAllCustomers();
+  async getAll(): Promise<Customer[]> {
+    return this.customerRepository.getAll();
   }
 
-  async createCustomer(customer: Customer): Promise<Customer> {
-    return await this.customerRepository.createCustomer(customer);
+  async create(customer: Customer): Promise<Customer> {
+    return await this.customerRepository.create(customer);
   }
 
-  async removeCustomer(id: string): Promise<void> {
-    await this.customerRepository.removeCustomer(id);
+  async remove(id: string): Promise<void> {
+    await this.customerRepository.remove(id);
   }
 }

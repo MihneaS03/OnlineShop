@@ -3,7 +3,7 @@ import { Customer } from '../domain/customer.domain';
 import { CreateCustomerDTO } from '../dto/create-customer.dto';
 
 export class CustomerMapper {
-  mapCustomerToCustomerDTO(customer: Customer): CustomerDTO {
+  static toDTO(customer: Customer): CustomerDTO {
     return new CustomerDTO(
       customer.firstName,
       customer.lastName,
@@ -12,7 +12,7 @@ export class CustomerMapper {
     );
   }
 
-  mapCustomerToCreateCustomerDTO(customer: Customer): CreateCustomerDTO {
+  static toCreateDTO(customer: Customer): CreateCustomerDTO {
     return new CreateCustomerDTO(
       customer.firstName,
       customer.lastName,
@@ -22,9 +22,7 @@ export class CustomerMapper {
     );
   }
 
-  mapCreateCustomerDTOToCustomer(
-    createCustomerDTO: CreateCustomerDTO,
-  ): Customer {
+  static toEntity(createCustomerDTO: CreateCustomerDTO): Customer {
     return new Customer(
       createCustomerDTO.firstName,
       createCustomerDTO.lastName,

@@ -10,17 +10,17 @@ export class OrderDetailRepository {
     private readonly orderDetailRepository: Repository<OrderDetail>,
   ) {}
 
-  getAllOrderDetails(): Promise<OrderDetail[]> {
+  async getAll(): Promise<OrderDetail[]> {
     return this.orderDetailRepository.find();
   }
 
-  getAllOrderDetailsOfOrder(orderId: string): Promise<OrderDetail[]> {
+  async getAllOfOrder(orderId: string): Promise<OrderDetail[]> {
     return this.orderDetailRepository.find({
       where: { orderId },
     });
   }
 
-  getOrderDetailById(
+  async getById(
     orderId: string,
     productId: string,
   ): Promise<OrderDetail | null> {
@@ -29,11 +29,11 @@ export class OrderDetailRepository {
     });
   }
 
-  async createOrderDetail(orderDetail: OrderDetail): Promise<OrderDetail> {
+  async create(orderDetail: OrderDetail): Promise<OrderDetail> {
     return await this.orderDetailRepository.save(orderDetail);
   }
 
-  async updateOrderDetail(
+  async update(
     orderId: string,
     productId: string,
     newOrderDetail: OrderDetail,
@@ -43,7 +43,7 @@ export class OrderDetailRepository {
     return await this.orderDetailRepository.save(newOrderDetail);
   }
 
-  async removeOrderDetail(orderId: string, productId: string): Promise<void> {
+  async remove(orderId: string, productId: string): Promise<void> {
     await this.orderDetailRepository.delete({ orderId, productId });
   }
 }
