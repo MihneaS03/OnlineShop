@@ -14,7 +14,7 @@ export class OrderDetailRepository {
     return this.orderDetailRepository.find();
   }
 
-  getAllOrderDetailsOfOrder(orderId: string) {
+  getAllOrderDetailsOfOrder(orderId: string): Promise<OrderDetail[]> {
     return this.orderDetailRepository.find({
       where: { orderId },
     });

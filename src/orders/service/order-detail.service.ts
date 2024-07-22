@@ -15,6 +15,10 @@ export class OrderDetailService {
     return this.orderDetailRepository.getAllOrderDetails();
   }
 
+  getAllOrderDetailsOfOrder(orderId: string): Promise<OrderDetail[]> {
+    return this.orderDetailRepository.getAllOrderDetailsOfOrder(orderId);
+  }
+
   async getOrderDetailById(
     orderId: string,
     productId: string,

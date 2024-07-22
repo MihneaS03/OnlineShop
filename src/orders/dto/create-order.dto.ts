@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, getSchemaPath } from '@nestjs/swagger';
 
 export class OrderProduct {
   productId: string;
@@ -28,7 +28,11 @@ export class CreateOrderDTO {
   @ApiProperty({ description: 'The street destination of the order' })
   addressStreet: string;
 
-  @ApiProperty({ description: 'The order details associated to the order' })
+  @ApiProperty({
+    description: 'The order details associated to the order',
+    type: 'array',
+    items: { $ref: getSchemaPath(OrderProduct) },
+  })
   orderProducts: OrderProduct[];
 
   constructor(

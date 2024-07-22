@@ -12,6 +12,7 @@ import { OrderDetailService } from './order-detail.service';
 import { OrderProduct } from '../dto/create-order.dto';
 import { Location } from 'src/products/domain/location.domain';
 import { LocationService } from 'src/products/service/location.service';
+import { CustomerService } from 'src/customers/service/customer.service';
 
 @Injectable()
 export class OrderService {
@@ -20,6 +21,7 @@ export class OrderService {
     private readonly orderDetailService: OrderDetailService,
     private readonly stockService: StockService,
     private readonly locationService: LocationService,
+    private readonly customerService: CustomerService,
   ) {}
 
   getAllOrders(): Promise<Order[]> {
@@ -39,6 +41,15 @@ export class OrderService {
     orderProducts: OrderProduct[],
   ): Promise<Order> {
     order.createdAt = new Date();
+    const customer = await this.customerService.getCustomerById(
+      order.customer.id,
+    );
+
+    if (!customer) {
+      throw new BadRequestException(
+        'The customer added to the order does not exist',
+      );
+    }
 
     for (const orderProduct of orderProducts) {
       const stock: Stock = await this.stockService.getStockById(
@@ -102,6 +113,14 @@ export class OrderService {
   }
 
   async removeOrder(id: string): Promise<void> {
+    const allOrderDetails: OrderDetail[] =
+      await this.orderDetailService.getAllOrderDetailsOfOrder(id);
+    for (const orderDetail of allOrderDetails) {
+      await this.orderDetailService.removeOrderDetail(
+        orderDetail.orderId,
+        orderDetail.productId,
+      );
+    }
     await this.orderRepository.removeOrder(id);
   }
 }
