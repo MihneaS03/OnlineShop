@@ -33,11 +33,13 @@ export class Customer {
     username: string,
     password: string,
     emailAddress: string,
+    role: string,
   ) {
     this.firstName = firstName;
     this.lastName = lastName;
     this.username = username;
     this.password = password;
     this.emailAddress = emailAddress;
+    this.role = role;
   }
 }
