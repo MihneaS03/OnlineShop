@@ -18,6 +18,10 @@ export class CustomerRepository {
     return this.customerRepository.findOneBy({ id });
   }
 
+  getCustomerByUsername(username: string): Promise<Customer | null> {
+    return this.customerRepository.findOne({ where: { username } });
+  }
+
   async create(customer: Customer): Promise<Customer> {
     return await this.customerRepository.save(customer);
   }

@@ -18,6 +18,15 @@ export class CustomerService {
     return this.customerRepository.getAll();
   }
 
+  async getCustomerByUsername(username: string): Promise<Customer | null> {
+    const customer: Customer =
+      await this.customerRepository.getCustomerByUsername(username);
+    if (!customer) {
+      throw new NotFoundException('The customer was not found');
+    }
+    return customer;
+  }
+
   async create(customer: Customer): Promise<Customer> {
     return await this.customerRepository.create(customer);
   }
