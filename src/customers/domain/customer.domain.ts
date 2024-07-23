@@ -21,6 +21,9 @@ export class Customer {
   @Column({ name: 'email_address', unique: true })
   emailAddress: string;
 
+  @Column()
+  role: string;
+
   @OneToMany(() => Order, (order) => order.customer)
   orders: Order[];
 

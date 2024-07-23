@@ -6,6 +6,10 @@ import { CustomerRepository } from '../repository/customer.repository';
 export class CustomerService {
   constructor(private readonly customerRepository: CustomerRepository) {}
 
+  async getAll(): Promise<Customer[]> {
+    return this.customerRepository.getAll();
+  }
+
   async getById(id: string): Promise<Customer | null> {
     const customer: Customer = await this.customerRepository.getById(id);
     if (!customer) {
@@ -14,13 +18,9 @@ export class CustomerService {
     return customer;
   }
 
-  async getAll(): Promise<Customer[]> {
-    return this.customerRepository.getAll();
-  }
-
-  async getCustomerByUsername(username: string): Promise<Customer | null> {
+  async getByUsername(username: string): Promise<Customer | null> {
     const customer: Customer =
-      await this.customerRepository.getCustomerByUsername(username);
+      await this.customerRepository.getByUsername(username);
     if (!customer) {
       throw new NotFoundException('The customer was not found');
     }

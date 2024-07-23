@@ -18,7 +18,7 @@ export class CustomerRepository {
     return this.customerRepository.findOneBy({ id });
   }
 
-  getCustomerByUsername(username: string): Promise<Customer | null> {
+  getByUsername(username: string): Promise<Customer | null> {
     return this.customerRepository.findOne({ where: { username } });
   }
 

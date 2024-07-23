@@ -48,6 +48,10 @@ export class OrderService {
       );
     }
 
+    if (!orderProducts || orderProducts.length == 0) {
+      throw new BadRequestException('The basket cannot be empty');
+    }
+
     await Promise.all(
       orderProducts.map(async (orderProduct) => {
         const stock: Stock = await this.stockService.getById(
