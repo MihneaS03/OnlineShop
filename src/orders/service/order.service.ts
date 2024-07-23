@@ -90,6 +90,10 @@ export class OrderService {
     newOrder: Order,
     orderDetails: OrderDetail[],
   ): Promise<Order> {
+    if (!(await this.orderRepository.getById(id))) {
+      throw new NotFoundException('The order was not found');
+    }
+
     await Promise.all(
       orderDetails.map(async (orderDetail) => {
         const stock: Stock = await this.stockService.getById(
