@@ -1,6 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { Customer } from '../domain/customer.domain';
 import { CustomerRepository } from '../repository/customer.repository';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class CustomerService {
@@ -28,7 +29,11 @@ export class CustomerService {
   }
 
   async create(customer: Customer): Promise<Customer> {
-    return await this.customerRepository.create(customer);
+    const hashedPassword = await bcrypt.hash(customer.password, 10);
+    return await this.customerRepository.create({
+      ...customer,
+      password: hashedPassword,
+    });
   }
 
   async remove(id: string): Promise<void> {
