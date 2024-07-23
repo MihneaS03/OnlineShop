@@ -46,7 +46,7 @@ export class AuthService {
     return null;
   }
 
-  async login(customer: Customer): Promise<any> {
+  async login(customer: Partial<Customer>): Promise<any> {
     const payload = {
       username: customer.username,
       sub: {
