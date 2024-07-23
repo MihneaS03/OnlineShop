@@ -24,6 +24,7 @@ export class AuthService {
 
     if (customer && (await bcrypt.compare(password, customer.password))) {
       return {
+        id: customer.id,
         firstName: customer.firstName,
         lastName: customer.lastName,
         username: customer.username,
@@ -47,11 +48,13 @@ export class AuthService {
   }
 
   async login(customer: Partial<Customer>): Promise<any> {
+    const validatedCustomer: Partial<Customer> = await this.validateCustomer(
+      customer.username,
+      customer.password,
+    );
     const payload = {
-      username: customer.username,
-      sub: {
-        emailAddress: customer.emailAddress,
-      },
+      username: validatedCustomer.username,
+      sub: validatedCustomer.id,
     };
 
     return {
