@@ -20,6 +20,7 @@ import { LocationService } from './service/location.service';
 import { LocationRepository } from './repository/location.repository';
 import { LocationMapper } from './mapper/location.mapper';
 import { CustomersModule } from '../customers/customers.module';
+import { LocationController } from './controller/location.controller';
 
 @Module({
   imports: [
@@ -40,7 +41,12 @@ import { CustomersModule } from '../customers/customers.module';
     LocationService,
     LocationMapper,
   ],
-  controllers: [ProductController, ProductCategoryController, StockController],
+  controllers: [
+    ProductController,
+    ProductCategoryController,
+    StockController,
+    LocationController,
+  ],
   exports: [ProductService, LocationService, StockService],
 })
 export class ProductsModule {}

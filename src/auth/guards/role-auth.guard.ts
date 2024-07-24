@@ -6,14 +6,10 @@ import {
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { Roles } from '../decorators/roles.decorator';
-import { CustomerService } from '../../customers/service/customer.service';
 
 @Injectable()
 export class RolesGuard implements CanActivate {
-  constructor(
-    private readonly reflector: Reflector,
-    private readonly customerService: CustomerService,
-  ) {}
+  constructor(private readonly reflector: Reflector) {}
 
   matchRoles(roles: string[], role: string) {
     if (roles.includes(role)) {

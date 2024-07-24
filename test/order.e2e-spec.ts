@@ -4,6 +4,21 @@ import * as request from 'supertest';
 import { AppModule } from './../src/app.module';
 import { initializeTransactionalContext } from 'typeorm-transactional';
 
+const mockOrderData = {
+  customer: '8d9a507a-c093-45a2-8613-2a2f980389fb',
+  addressCountry: 'Romania',
+  addressCity: 'Cluj-Napoca',
+  addressCounty: 'Cluj',
+  addressStreet: 'Brassai',
+  orderProducts: [
+    {
+      product: 'e068a51d-7dd2-4c80-8d99-d34519fbc9d7',
+      shippedFrom: '9e8fdec8-ab0a-4355-bcb5-47b8f19cd5b7',
+      quantity: 1,
+    },
+  ],
+};
+
 describe('OrderController (e2e)', () => {
   let app: INestApplication;
 
@@ -15,8 +30,6 @@ describe('OrderController (e2e)', () => {
 
     app = moduleFixture.createNestApplication();
     await app.init();
-
-    //clear and seed
   });
 
   it('should create a new order successfully', async () => {
@@ -31,20 +44,7 @@ describe('OrderController (e2e)', () => {
     return await request(app.getHttpServer())
       .post('/orders')
       .set('Authorization', `Bearer ${accessToken}`)
-      .send({
-        customer: '8d9a507a-c093-45a2-8613-2a2f980389fb',
-        addressCountry: 'Romania',
-        addressCity: 'Cluj-Napoca',
-        addressCounty: 'Cluj',
-        addressStreet: 'Brassai',
-        orderProducts: [
-          {
-            product: 'e068a51d-7dd2-4c80-8d99-d34519fbc9d7',
-            shippedFrom: '9e8fdec8-ab0a-4355-bcb5-47b8f19cd5b7',
-            quantity: 1,
-          },
-        ],
-      })
+      .send(mockOrderData)
       .expect(201);
   });
 
@@ -75,5 +75,9 @@ describe('OrderController (e2e)', () => {
         ],
       })
       .expect(400);
+  });
+
+  afterAll(async () => {
+    await app.close();
   });
 });

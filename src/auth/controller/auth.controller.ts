@@ -14,14 +14,20 @@ export class AuthController {
   @UseGuards(LocalAuthGuard)
   @Public()
   @Post('login')
-  async login(@Body() loginDTO: LoginDTO) {
+  async login(@Body() loginDTO: LoginDTO): Promise<{
+    username: string;
+    accessToken: string;
+    refreshToken: string;
+  }> {
     return await this.authService.login(loginDTO);
   }
 
   @UseGuards(RefreshJwtGuard)
   @Public()
   @Post('refresh')
-  async refreshToken(@Body() { refresh }: { refresh: string }) {
-    return this.authService.refreshToken(refresh);
+  async refreshToken(@Body() { refresh }: { refresh: string }): Promise<{
+    accessToken: string;
+  }> {
+    return await this.authService.refreshToken(refresh);
   }
 }
