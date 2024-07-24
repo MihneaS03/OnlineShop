@@ -29,11 +29,8 @@ export class RolesGuard implements CanActivate {
     }
 
     const request = context.switchToHttp().getRequest();
-    const customer = await this.customerService.getByUsername(
-      request.user.username,
-    );
 
-    if (!this.matchRoles(roles, customer.role)) {
+    if (!this.matchRoles(roles, request.user.role)) {
       throw new UnauthorizedException('You are not allowed to do this');
     }
     return true;
