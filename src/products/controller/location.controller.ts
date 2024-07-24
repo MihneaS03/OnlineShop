@@ -13,7 +13,7 @@ export class LocationController {
 
   @Get('available')
   @Public()
-  async getAvailableLocations(): Promise<AvailableLocationDTO> {
+  async getAvailableLocations(): Promise<AvailableLocationDTO[]> {
     const response = await axios.get(
       'https://raw.githubusercontent.com/catalin87/baza-de-date-localitati-romania/master/date/localitati.csv',
     );
@@ -24,19 +24,19 @@ export class LocationController {
       const locationString: string[] = row.split(',');
       locations.push(
         new AvailableLocationDTO(
-          locationString[0],
-          locationString[1],
-          locationString[2],
-          locationString[3],
-          locationString[4],
-          locationString[5],
-          locationString[6],
-          locationString[7],
-          locationString[8],
+          JSON.parse(locationString[0]),
+          JSON.parse(locationString[1]),
+          JSON.parse(locationString[2]),
+          JSON.parse(locationString[3]),
+          JSON.parse(locationString[4]),
+          JSON.parse(locationString[5]),
+          JSON.parse(locationString[6]),
+          JSON.parse(locationString[7]),
+          JSON.parse(locationString[8]),
         ),
       );
     }
-    console.log(locations[0]);
-    return response.data;
+    locations.shift();
+    return locations;
   }
 }
