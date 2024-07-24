@@ -1,8 +1,8 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { OrderDetailRepository } from '../repository/order-detail.repository';
 import { OrderDetail } from '../domain/order-detail.domain';
-import { StockService } from 'src/products/service/stock.service';
-import { Stock } from 'src/products/domain/stock.domain';
+import { StockService } from '../../products/service/stock.service';
+import { Stock } from '../../products/domain/stock.domain';
 
 @Injectable()
 export class OrderDetailService {

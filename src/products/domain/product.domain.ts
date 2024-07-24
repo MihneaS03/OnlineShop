@@ -7,7 +7,7 @@ import {
   OneToMany,
 } from 'typeorm';
 import { ProductCategory } from './product-category.domain';
-import { OrderDetail } from 'src/orders/domain/order-detail.domain';
+import { OrderDetail } from '../../orders/domain/order-detail.domain';
 import { Stock } from './stock.domain';
 
 @Entity()

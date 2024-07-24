@@ -19,7 +19,7 @@ import { StockController } from './controller/stock.controller';
 import { LocationService } from './service/location.service';
 import { LocationRepository } from './repository/location.repository';
 import { LocationMapper } from './mapper/location.mapper';
-import { CustomersModule } from 'src/customers/customers.module';
+import { CustomersModule } from '../customers/customers.module';
 
 @Module({
   imports: [

@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { CustomerDTO } from 'src/customers/dto/customer.dto';
+import { CustomerDTO } from '../../customers/dto/customer.dto';
 
 export class OrderDTO {
   @ApiProperty({ description: 'The customer that placed the order' })

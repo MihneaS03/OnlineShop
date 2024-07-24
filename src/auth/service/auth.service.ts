@@ -3,8 +3,8 @@ import {
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
-import { Customer } from 'src/customers/domain/customer.domain';
-import { CustomerService } from 'src/customers/service/customer.service';
+import { Customer } from '../../customers/domain/customer.domain';
+import { CustomerService } from '../../customers/service/customer.service';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';

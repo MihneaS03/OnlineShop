@@ -16,11 +16,12 @@ import { CreateProductDTO } from '../dto/create-product.dto';
 import { ProductCategoryService } from '../service/product-category.service';
 import { ProductCategory } from '../domain/product-category.domain';
 import { UpdateProductDTO } from '../dto/update-product.dto';
-import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ProductCategoryMapper } from '../mapper/product-category.mapper';
-import { Roles } from 'src/auth/decorators/roles.decorator';
-import { RolesGuard } from 'src/auth/guards/role-auth.guard';
+import { Roles } from '../../auth/decorators/roles.decorator';
+import { RolesGuard } from '../../auth/guards/role-auth.guard';
 
+@ApiBearerAuth()
 @ApiTags('products')
 @Controller('products')
 @UseGuards(RolesGuard)

@@ -4,9 +4,10 @@ import { CreateCustomerDTO } from '../dto/create-customer.dto';
 import { Customer } from '../domain/customer.domain';
 import { CustomerMapper } from '../mapper/customer.mapper';
 import { CustomerDTO } from '../dto/customer.dto';
-import { ApiResponse, ApiTags } from '@nestjs/swagger';
-import { Public } from 'src/auth/constants/auth.constants';
+import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { Public } from '../../auth/constants/auth.constants';
 
+@ApiBearerAuth()
 @ApiTags('customers')
 @Controller('customers')
 export class CustomerController {

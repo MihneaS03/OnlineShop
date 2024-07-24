@@ -13,8 +13,9 @@ import { ProductCategoryMapper } from '../mapper/product-category.mapper';
 import { ProductCategory } from '../domain/product-category.domain';
 import { CreateProductCategoryDTO } from '../dto/create-product-category.dto';
 import { UpdateProductCategoryDTO } from '../dto/update-product-category.dto';
-import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 
+@ApiBearerAuth()
 @ApiTags('product-categories')
 @Controller('product-categories')
 export class ProductCategoryController {
