@@ -12,16 +12,17 @@ import { OrderMapper } from '../mapper/order.mapper';
 import { Order } from '../domain/order.domain';
 import { OrderDTO } from '../dto/order.dto';
 import { CreateOrderDTO } from '../dto/create-order.dto';
-import { CustomerService } from 'src/customers/service/customer.service';
+import { CustomerService } from '../../customers/service/customer.service';
 import { UpdateOrderDTO } from '../dto/update-order.dto';
-import { ApiResponse, ApiTags } from '@nestjs/swagger';
-import { CustomerMapper } from 'src/customers/mapper/customer.mapper';
+import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { CustomerMapper } from '../../customers/mapper/customer.mapper';
 import { OrderDetailMapper } from '../mapper/order-detail.mapper';
-import { LocationService } from 'src/products/service/location.service';
+import { LocationService } from '../../products/service/location.service';
 import { OrderDetail } from '../domain/order-detail.domain';
-import { Location } from 'src/products/domain/location.domain';
+import { Location } from '../../products/domain/location.domain';
 import { UpdateOrderDetailDTO } from '../dto/update-order-detail.dto';
 
+@ApiBearerAuth()
 @ApiTags('orders')
 @Controller('orders')
 export class OrderController {
@@ -103,8 +104,9 @@ export class OrderController {
     const orderDetailsDTO: UpdateOrderDetailDTO[] = updateOrderDTO.orderDetails;
     const orderDetails: OrderDetail[] = await Promise.all(
       orderDetailsDTO.map(async (orderDetail) => {
-        const shippedFrom: Location =
-          await this.locationService.getById(orderDetail.shippedFrom);
+        const shippedFrom: Location = await this.locationService.getById(
+          orderDetail.shippedFrom,
+        );
         return OrderDetailMapper.updateDTOToEntity(orderDetail, shippedFrom);
       }),
     );

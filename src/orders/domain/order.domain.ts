@@ -1,4 +1,3 @@
-import { Customer } from 'src/customers/domain/customer.domain';
 import {
   Entity,
   Column,
@@ -8,6 +7,7 @@ import {
   OneToMany,
 } from 'typeorm';
 import { OrderDetail } from './order-detail.domain';
+import { Customer } from '../../customers/domain/customer.domain';
 
 @Entity()
 export class Order {

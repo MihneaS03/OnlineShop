@@ -1,9 +1,9 @@
 import { OrderDTO } from '../dto/order.dto';
 import { Order } from '../domain/order.domain';
-import { Customer } from 'src/customers/domain/customer.domain';
+import { Customer } from '../../customers/domain/customer.domain';
 import { CreateOrderDTO } from '../dto/create-order.dto';
 import { UpdateOrderDTO } from '../dto/update-order.dto';
-import { CustomerDTO } from 'src/customers/dto/customer.dto';
+import { CustomerDTO } from '../../customers/dto/customer.dto';
 
 export class OrderMapper {
   static toDTO(order: Order, customerDTO: CustomerDTO): OrderDTO {

@@ -13,15 +13,20 @@ export class CustomerDTO {
   @ApiProperty({ description: 'The email address of the customer' })
   emailAddress: string;
 
+  @ApiProperty({ description: 'The role of the user' })
+  role: string;
+
   constructor(
     firstName: string,
     lastName: string,
     username: string,
     emailAddress: string,
+    role: string,
   ) {
     this.firstName = firstName;
     this.lastName = lastName;
     this.username = username;
     this.emailAddress = emailAddress;
+    this.role = role;
   }
 }

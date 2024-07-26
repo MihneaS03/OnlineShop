@@ -22,17 +22,23 @@ export class CreateCustomerDTO {
   @IsNotEmpty()
   emailAddress: string;
 
+  @ApiProperty({ description: 'The role of the user' })
+  @IsNotEmpty()
+  role: string;
+
   constructor(
     firstName: string,
     lastName: string,
     username: string,
     password: string,
     emailAddress: string,
+    role: string,
   ) {
     this.firstName = firstName;
     this.lastName = lastName;
     this.username = username;
     this.password = password;
     this.emailAddress = emailAddress;
+    this.role = role;
   }
 }

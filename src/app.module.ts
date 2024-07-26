@@ -5,7 +5,6 @@ import { ProductsModule } from './products/products.module';
 import { CustomersModule } from './customers/customers.module';
 import { SharedModule } from './shared/shared.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-
 import { Customer } from './customers/domain/customer.domain';
 import { Order } from './orders/domain/order.domain';
 import { OrderDetail } from './orders/domain/order-detail.domain';
@@ -15,9 +14,12 @@ import { Stock } from './products/domain/stock.domain';
 import { Location } from './products/domain/location.domain';
 import { addTransactionalDataSource } from 'typeorm-transactional';
 import { DataSource } from 'typeorm';
+import { AuthModule } from './auth/auth.module';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({ isGlobal: true }),
     OrdersModule,
     ProductsModule,
     CustomersModule,
@@ -52,6 +54,7 @@ import { DataSource } from 'typeorm';
         return addTransactionalDataSource(new DataSource(options));
       },
     }),
+    AuthModule,
   ],
   controllers: [HealthController],
   providers: [],

@@ -6,13 +6,13 @@ import {
 import { OrderRepository } from '../repository/order.repository';
 import { Order } from '../domain/order.domain';
 import { OrderDetail } from '../domain/order-detail.domain';
-import { Stock } from 'src/products/domain/stock.domain';
-import { StockService } from 'src/products/service/stock.service';
+import { Stock } from '../../products/domain/stock.domain';
+import { StockService } from '../../products/service/stock.service';
 import { OrderDetailService } from './order-detail.service';
 import { OrderProduct } from '../dto/create-order.dto';
-import { Location } from 'src/products/domain/location.domain';
-import { LocationService } from 'src/products/service/location.service';
-import { CustomerService } from 'src/customers/service/customer.service';
+import { Location } from '../../products/domain/location.domain';
+import { LocationService } from '../../products/service/location.service';
+import { CustomerService } from '../../customers/service/customer.service';
 import { Transactional } from 'typeorm-transactional';
 
 @Injectable()
@@ -46,6 +46,10 @@ export class OrderService {
       throw new BadRequestException(
         'The customer added to the order does not exist',
       );
+    }
+
+    if (!orderProducts || orderProducts.length == 0) {
+      throw new BadRequestException('The basket cannot be empty');
     }
 
     await Promise.all(

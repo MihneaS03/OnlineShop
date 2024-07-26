@@ -1,6 +1,6 @@
-import { ProductDTO } from 'src/products/dto/product.dto';
+import { ProductDTO } from '../../products/dto/product.dto';
 import { OrderDTO } from './order.dto';
-import { LocationDTO } from 'src/products/dto/location.dto';
+import { LocationDTO } from '../../products/dto/location.dto';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class OrderDetailDTO {

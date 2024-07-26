@@ -6,6 +6,7 @@ import {
   Param,
   Post,
   Put,
+  UseGuards,
 } from '@nestjs/common';
 import { ProductService } from '../service/product.service';
 import { ProductMapper } from '../mapper/product.mapper';
@@ -15,11 +16,15 @@ import { CreateProductDTO } from '../dto/create-product.dto';
 import { ProductCategoryService } from '../service/product-category.service';
 import { ProductCategory } from '../domain/product-category.domain';
 import { UpdateProductDTO } from '../dto/update-product.dto';
-import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ProductCategoryMapper } from '../mapper/product-category.mapper';
+import { Roles } from '../../auth/decorators/roles.decorator';
+import { RolesGuard } from '../../auth/guards/role-auth.guard';
 
+@ApiBearerAuth()
 @ApiTags('products')
 @Controller('products')
+@UseGuards(RolesGuard)
 export class ProductController {
   constructor(
     private readonly productService: ProductService,
@@ -59,6 +64,7 @@ export class ProductController {
   }
 
   @Post()
+  @Roles(['admin'])
   @ApiResponse({
     status: 201,
     description: 'The product was succesfully created',
@@ -72,6 +78,7 @@ export class ProductController {
   }
 
   @Put(':id')
+  @Roles(['admin'])
   @ApiResponse({
     status: 200,
     description: 'The product was succesfully updated',
@@ -93,6 +100,7 @@ export class ProductController {
   }
 
   @Delete(':id')
+  @Roles(['admin'])
   @ApiResponse({
     status: 200,
     description: 'The product was succesfully deleted',

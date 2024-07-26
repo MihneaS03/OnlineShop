@@ -1,7 +1,7 @@
 import { Entity, Column, PrimaryColumn, ManyToOne, JoinColumn } from 'typeorm';
 
-import { Product } from 'src/products/domain/product.domain';
-import { Location } from 'src/products/domain/location.domain';
+import { Product } from '../../products/domain/product.domain';
+import { Location } from '../../products/domain/location.domain';
 
 @Entity()
 export class Stock {

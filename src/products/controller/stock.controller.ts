@@ -3,7 +3,7 @@ import { StockService } from '../service/stock.service';
 import { StockMapper } from '../mapper/stock.mapper';
 import { StockDTO } from '../dto/stock.dto';
 import { Stock } from '../domain/stock.domain';
-import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ProductMapper } from '../mapper/product.mapper';
 import { LocationMapper } from '../mapper/location.mapper';
 import { ProductService } from '../service/product.service';
@@ -15,6 +15,7 @@ import { ProductCategoryService } from '../service/product-category.service';
 import { ProductCategory } from '../domain/product-category.domain';
 import { UpdateStockDTO } from '../dto/update-stock.dto';
 
+@ApiBearerAuth()
 @ApiTags('stocks')
 @Controller('stocks')
 export class StockController {

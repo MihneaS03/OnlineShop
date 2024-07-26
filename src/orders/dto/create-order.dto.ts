@@ -1,3 +1,4 @@
+import { IsNotEmpty } from '@nestjs/class-validator';
 import { ApiProperty, getSchemaPath } from '@nestjs/swagger';
 
 export class OrderProduct {
@@ -14,18 +15,23 @@ export class OrderProduct {
 
 export class CreateOrderDTO {
   @ApiProperty({ description: 'The id of the customer that placed the order' })
+  @IsNotEmpty()
   customer: string;
 
   @ApiProperty({ description: 'The country destination of the order' })
+  @IsNotEmpty()
   addressCountry: string;
 
   @ApiProperty({ description: 'The city destination of the order' })
+  @IsNotEmpty()
   addressCity: string;
 
   @ApiProperty({ description: 'The county destination of the order' })
+  @IsNotEmpty()
   addressCounty: string;
 
   @ApiProperty({ description: 'The street destination of the order' })
+  @IsNotEmpty()
   addressStreet: string;
 
   @ApiProperty({
@@ -33,6 +39,7 @@ export class CreateOrderDTO {
     type: 'array',
     items: { $ref: getSchemaPath(OrderProduct) },
   })
+  @IsNotEmpty()
   orderProducts: OrderProduct[];
 
   constructor(

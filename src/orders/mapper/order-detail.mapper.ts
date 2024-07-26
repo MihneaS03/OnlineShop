@@ -1,10 +1,10 @@
 import { OrderDetail } from '../domain/order-detail.domain';
 import { OrderDetailDTO } from '../dto/order-detail.dto';
 import { OrderDTO } from '../dto/order.dto';
-import { ProductDTO } from 'src/products/dto/product.dto';
-import { LocationDTO } from 'src/products/dto/location.dto';
+import { ProductDTO } from '../../products/dto/product.dto';
+import { LocationDTO } from '../../products/dto/location.dto';
 import { CreateOrderDetailDTO } from '../dto/create-order-detail.dto';
-import { Location } from 'src/products/domain/location.domain';
+import { Location } from '../../products/domain/location.domain';
 import { UpdateOrderDetailDTO } from '../dto/update-order-detail.dto';
 
 export class OrderDetailMapper {
