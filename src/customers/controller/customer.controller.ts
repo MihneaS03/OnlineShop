@@ -17,6 +17,7 @@ export class CustomerController {
   @ApiResponse({
     status: 200,
     description: 'The customers were succesfully retrieved',
+    type: [CustomerDTO],
   })
   async getAll(): Promise<CustomerDTO[]> {
     const allCustomers: Customer[] = await this.customerService.getAll();
@@ -27,12 +28,13 @@ export class CustomerController {
   @ApiResponse({
     status: 200,
     description: 'The customer was succesfully retrieved',
+    type: CustomerDTO,
   })
   @ApiResponse({
     status: 404,
     description: 'The customer was not found',
   })
-  async getById(@Param('id') id: string): Promise<CustomerDTO> {
+  async getById(@Param('id') id: string): Promise<CustomerDTO | null> {
     const customer: Customer = await this.customerService.getById(id);
     return CustomerMapper.toDTO(customer);
   }
@@ -42,12 +44,15 @@ export class CustomerController {
   @ApiResponse({
     status: 201,
     description: 'The customer was succesfully created',
+    type: CustomerDTO,
   })
   async create(
     @Body() createCustomerDTO: CreateCustomerDTO,
-  ): Promise<Customer> {
-    return await this.customerService.create(
+  ): Promise<CustomerDTO> {
+    const createdCustomer: Customer = await this.customerService.create(
       CustomerMapper.toEntity(createCustomerDTO),
     );
+
+    return CustomerMapper.toDTO(createdCustomer);
   }
 }

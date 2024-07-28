@@ -1,5 +1,5 @@
 import { Controller, Get } from '@nestjs/common';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { LocationService } from '../service/location.service';
 import axios from 'axios';
 import { Public } from '../../auth/constants/auth.constants';
@@ -12,6 +12,11 @@ export class LocationController {
   constructor(private readonly locationService: LocationService) {}
 
   @Get('available')
+  @ApiResponse({
+    status: 200,
+    description: 'The available locations were successfully retrieved',
+    type: [AvailableLocationDTO],
+  })
   @Public()
   async getAvailableLocations(): Promise<AvailableLocationDTO[]> {
     const response = await axios.get(

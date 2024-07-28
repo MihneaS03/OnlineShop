@@ -36,6 +36,7 @@ export class OrderController {
   @ApiResponse({
     status: 200,
     description: 'The orders were succesfully retrieved',
+    type: [OrderDTO],
   })
   async getAll(): Promise<OrderDTO[]> {
     const allOrders: Order[] = await this.orderService.getAll();
@@ -52,12 +53,13 @@ export class OrderController {
   @ApiResponse({
     status: 200,
     description: 'The order was succesfully retrieved',
+    type: OrderDTO,
   })
   @ApiResponse({
     status: 404,
     description: 'The order was not found',
   })
-  async getById(@Param('id') id: string): Promise<OrderDTO> {
+  async getById(@Param('id') id: string): Promise<OrderDTO | null> {
     const order: Order = await this.orderService.getById(id);
     const customer = await this.customerService.getById(order.customer.id);
 
@@ -68,26 +70,30 @@ export class OrderController {
   @ApiResponse({
     status: 201,
     description: 'The order was succesfully created',
+    type: OrderDTO,
   })
   @ApiResponse({
     status: 404,
     description: 'The customer was not found',
   })
-  async create(@Body() createOrderDTO: CreateOrderDTO): Promise<Order> {
+  async create(@Body() createOrderDTO: CreateOrderDTO): Promise<OrderDTO> {
     const customer = await this.customerService.getById(
       createOrderDTO.customer,
     );
 
-    return await this.orderService.create(
+    const createdOrder: Order = await this.orderService.create(
       OrderMapper.createDTOToEntity(createOrderDTO, customer),
       createOrderDTO.orderProducts,
     );
+
+    return OrderMapper.toDTO(createdOrder, CustomerMapper.toDTO(customer));
   }
 
   @Put(':id')
   @ApiResponse({
     status: 200,
     description: 'The order was succesfully updated',
+    type: OrderDTO,
   })
   @ApiResponse({
     status: 404,
@@ -96,7 +102,7 @@ export class OrderController {
   async update(
     @Param('id') id: string,
     @Body() updateOrderDTO: UpdateOrderDTO,
-  ): Promise<Order> {
+  ): Promise<OrderDTO> {
     const customer = await this.customerService.getById(
       updateOrderDTO.customer,
     );
@@ -111,11 +117,13 @@ export class OrderController {
       }),
     );
 
-    return await this.orderService.update(
+    const updatedOrder: Order = await this.orderService.update(
       id,
       OrderMapper.updateDTOToEntity(updateOrderDTO, customer),
       orderDetails,
     );
+
+    return OrderMapper.toDTO(updatedOrder, CustomerMapper.toDTO(customer));
   }
 
   @Delete(':id')

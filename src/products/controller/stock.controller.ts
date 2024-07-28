@@ -30,6 +30,7 @@ export class StockController {
   @ApiResponse({
     status: 200,
     description: 'The stocks were succesfully retrieved',
+    type: [StockDTO],
   })
   async getAll(): Promise<StockDTO[]> {
     const allStocks: Stock[] = await this.stockService.getAll();
@@ -60,6 +61,7 @@ export class StockController {
   @ApiResponse({
     status: 200,
     description: 'The stock was succesfully updated',
+    type: StockDTO,
   })
   @ApiResponse({
     status: 404,
@@ -69,11 +71,22 @@ export class StockController {
     @Param('productId') productId: string,
     @Param('locationId') locationId: string,
     @Body() updateStockDTO: UpdateStockDTO,
-  ): Promise<Stock> {
-    return await this.stockService.update(
+  ): Promise<StockDTO> {
+    const updatedStock: Stock = await this.stockService.update(
       productId,
       locationId,
       StockMapper.updateDTOToEntity(updateStockDTO),
+    );
+    const product: Product = await this.productService.getById(productId);
+    const location: Location = await this.locationService.getById(locationId);
+
+    return StockMapper.toDTO(
+      updatedStock,
+      ProductMapper.toDTO(
+        product,
+        ProductCategoryMapper.toDTO(product.category),
+      ),
+      LocationMapper.toDTO(location),
     );
   }
 }

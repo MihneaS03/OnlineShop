@@ -27,10 +27,12 @@ export class ProductCategoryController {
   @ApiResponse({
     status: 200,
     description: 'The categories were succesfully retrieved',
+    type: [ProductCategoryDTO],
   })
   async getAll(): Promise<ProductCategoryDTO[]> {
     const allProductCategories: ProductCategory[] =
       await this.productCategoryService.getAll();
+
     return allProductCategories.map((productCategory) =>
       ProductCategoryMapper.toDTO(productCategory),
     );
@@ -40,6 +42,7 @@ export class ProductCategoryController {
   @ApiResponse({
     status: 200,
     description: 'The category was succesfully retrieved',
+    type: ProductCategoryDTO,
   })
   @ApiResponse({
     status: 404,
@@ -54,19 +57,24 @@ export class ProductCategoryController {
   @ApiResponse({
     status: 201,
     description: 'The category was succesfully created',
+    type: ProductCategoryDTO,
   })
   async create(
     @Body() createProductCategoryDTO: CreateProductCategoryDTO,
-  ): Promise<ProductCategory> {
-    return await this.productCategoryService.create(
-      ProductCategoryMapper.createDTOToEntity(createProductCategoryDTO),
-    );
+  ): Promise<ProductCategoryDTO> {
+    const createdCategory: ProductCategory =
+      await this.productCategoryService.create(
+        ProductCategoryMapper.createDTOToEntity(createProductCategoryDTO),
+      );
+
+    return ProductCategoryMapper.toDTO(createdCategory);
   }
 
   @Put(':id')
   @ApiResponse({
     status: 200,
     description: 'The category was succesfully updated',
+    type: ProductCategoryDTO,
   })
   @ApiResponse({
     status: 404,
@@ -75,11 +83,14 @@ export class ProductCategoryController {
   async update(
     @Param('id') id: string,
     @Body() updateProductCategoryDTO: UpdateProductCategoryDTO,
-  ): Promise<ProductCategory> {
-    return await this.productCategoryService.update(
-      id,
-      ProductCategoryMapper.updateDTOToEntity(updateProductCategoryDTO),
-    );
+  ): Promise<ProductCategoryDTO> {
+    const updatedCategory: ProductCategory =
+      await this.productCategoryService.update(
+        id,
+        ProductCategoryMapper.updateDTOToEntity(updateProductCategoryDTO),
+      );
+
+    return ProductCategoryMapper.toDTO(updatedCategory);
   }
 
   @Delete(':id')

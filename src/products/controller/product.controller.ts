@@ -35,6 +35,7 @@ export class ProductController {
   @ApiResponse({
     status: 200,
     description: 'The products were succesfully retrieved',
+    type: [ProductDTO],
   })
   async getAll(): Promise<ProductDTO[]> {
     const allProducts: Product[] = await this.productService.getAll();
@@ -50,6 +51,7 @@ export class ProductController {
   @ApiResponse({
     status: 200,
     description: 'The product was succesfully retrieved',
+    type: ProductDTO,
   })
   @ApiResponse({
     status: 404,
@@ -68,12 +70,21 @@ export class ProductController {
   @ApiResponse({
     status: 201,
     description: 'The product was succesfully created',
+    type: ProductDTO,
   })
-  async create(@Body() createProductDTO: CreateProductDTO): Promise<Product> {
+  async create(
+    @Body() createProductDTO: CreateProductDTO,
+  ): Promise<ProductDTO> {
     const productCategory: ProductCategory =
       await this.productCategoryService.getById(createProductDTO.category);
-    return await this.productService.create(
+
+    const createdProduct: Product = await this.productService.create(
       ProductMapper.createDTOToEntity(createProductDTO, productCategory),
+    );
+
+    return ProductMapper.toDTO(
+      createdProduct,
+      ProductCategoryMapper.toDTO(productCategory),
     );
   }
 
@@ -82,6 +93,7 @@ export class ProductController {
   @ApiResponse({
     status: 200,
     description: 'The product was succesfully updated',
+    type: ProductDTO,
   })
   @ApiResponse({
     status: 404,
@@ -90,12 +102,18 @@ export class ProductController {
   async update(
     @Param('id') id: string,
     @Body() updateProductDTO: UpdateProductDTO,
-  ): Promise<Product> {
+  ): Promise<ProductDTO> {
     const productCategory: ProductCategory =
       await this.productCategoryService.getById(updateProductDTO.category);
-    return await this.productService.update(
+
+    const updatedProduct: Product = await this.productService.update(
       id,
       ProductMapper.updateDTOToEntity(updateProductDTO, productCategory),
+    );
+
+    return ProductMapper.toDTO(
+      updatedProduct,
+      ProductCategoryMapper.toDTO(productCategory),
     );
   }
 
